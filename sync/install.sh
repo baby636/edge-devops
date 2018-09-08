@@ -33,7 +33,6 @@ sudo apt-get install ufw apache2 supervisor python-pip curl python-dev python-vi
 sudo a2enmod rewrite proxy proxy_http proxy_html cgid ssl status xml2enc
 
 ## SSH key
-echo $ssh_key > ~/.ssh/id_ed25519
 chmod 600 ~/.ssh/id_ed25519
 
 ## Virtual ENV
