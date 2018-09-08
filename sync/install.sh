@@ -58,7 +58,6 @@ sudo mkdir /etc/absync
 sudo rsync -avz /home/bitz/code/airbitz-sync-server/staging/hooks /etc/absync/
 sudo cp /home/bitz/code/airbitz-sync-server/staging/libgit2* /usr/lib
 sudo cp /home/bitz/code/airbitz-sync-server/staging/ab-sync /usr/bin/ 
-sudo vi /etc/absync/absync.conf
 sudo echo '
 [Servers]
 servers=https://git2.airbitz.co/repos,https://git3.airbitz.co/repos' > absync.conf
