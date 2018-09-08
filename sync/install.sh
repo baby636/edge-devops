@@ -3,8 +3,6 @@ set -e
 if [ ! -f env.sh ]; then
   echo '# Full DNS name of this machine (ie. git1.edge.app)
 export host_name=""
-# SSH private key with authorization to access github.com
-export ssh_key=""
 # CouchDB admin password
 export couchdb_admin_password=""
 # CouchDB user password
@@ -43,8 +41,8 @@ virtualenv ENV
 ## Clone code
 mkdir -p /home/bitz/code
 cd /home/bitz/code
-git clone git@github.com:Airbitz/airbitz-sync-server.git
-git clone git@github.com:Airbitz/edge-devops.git
+git clone git@github.com:EdgeApp/airbitz-sync-server.git
+git clone git@github.com:EdgeApp/edge-devops.git
 ln -s /home/bitz/code/airbitz-sync-server/syncserver /home/bitz/airbitz/ENV/airbitz
 
 ## Update virtual ENV
