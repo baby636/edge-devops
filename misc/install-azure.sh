@@ -1,6 +1,8 @@
 ### Mount Disk
-set -e
+
+sudo umount /datadrive
 sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << EOF | sudo fdisk /dev/sdc ${TGTDEV}
+  d # delete partition
   n # new partition
   p # primary partition
     # partition number 1
@@ -11,6 +13,7 @@ sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << EOF | sudo fdisk /dev/sdc ${TGTDEV}
   q # and we're done
 EOF
 
+set -e
 sudo mkfs -t ext4 /dev/sdc1
 sudo mkdir -p /datadrive
 sudo mount /dev/sdc1 /datadrive
