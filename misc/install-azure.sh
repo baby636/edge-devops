@@ -1,5 +1,5 @@
 ### Mount Disk
-
+set -e
 sed -e 's/\s*\([\+0-9a-zA-Z]*\).*/\1/' << EOF | sudo fdisk /dev/sdc ${TGTDEV}
   n # new partition
   p # primary partition
@@ -19,5 +19,5 @@ sudo sh -c 'cat ~/fstab >> /etc/fstab'
 sudo umount /datadrive
 sudo mount /datadrive
 sudo chmod 775 /datadrive/
-sudo chown edgy.edgy /datadrive/
+sudo chown ${USER}.${USER} /datadrive/
 df -BG

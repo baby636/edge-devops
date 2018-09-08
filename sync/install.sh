@@ -1,3 +1,5 @@
+set -e
+
 if [ ! -f env.sh ]; then
   echo '# Full DNS name of this machine (ie. git1.edge.app)
 export host_name=""
@@ -11,6 +13,7 @@ export couchdb_user_password=""
 # https://username:password@git2.edge.app:6984
 export seed_server=""' > env.sh
   echo 'Please complete the created env.sh file and rerun install script'
+  exit 1
 fi
 
 sudo sed -e "s/127.0.0.1 /127.0.0.1 ${machine_name} ${host_name} /g" /etc/hosts > /etc/hosts

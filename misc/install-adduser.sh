@@ -1,3 +1,5 @@
+set -e
+
 ## curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/misc/install-adduser.sh | bash
 
 echo '
