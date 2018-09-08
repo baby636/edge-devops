@@ -20,7 +20,8 @@ export seed_server=""' > env.sh
   exit 1
 fi
 
-sudo sed -e "s/127.0.0.1 /127.0.0.1 ${machine_name} ${host_name} /g" /etc/hosts > /etc/hosts
+sudo sed -e "s/127.0.0.1 /127.0.0.1 ${machine_name} ${host_name} /g" /etc/hosts > hosts
+sudo cp -a hosts /etc/
 sudo echo $machine_name > /etc/hostname
 sudo apt-get update -y
 sudo apt-get upgrade -y
@@ -49,6 +50,7 @@ pip install -r home/bitz/code/airbitz-sync-server/staging/requirements.txt
 cd /home/bitz/code/airbitz-sync-server/syncserver
 python manage.py migrate auth
 python manage.py migrate
+cd /home/bitz
 
 ## Absync
 sudo mkdir /etc/absync
@@ -58,18 +60,21 @@ sudo cp /home/bitz/code/airbitz-sync-server/staging/ab-sync /usr/bin/
 sudo vi /etc/absync/absync.conf
 sudo echo '
 [Servers]
-servers=https://git2.airbitz.co/repos,https://git3.airbitz.co/repos' > /etc/absync/absync.conf
+servers=https://git2.airbitz.co/repos,https://git3.airbitz.co/repos' > absync.conf
+sudo cp -a absync.conf /etc/absync/
 sudo cp /home/bitz/code/airbitz-sync-server/staging/supervisord/* /etc/supervisor/conf.d/
 sudo supervisorctl update
 
 ## Apache
-sudo sed -e "s/APACHE_RUN_USER=.*/APACHE_RUN_USER=bitz/g" /etc/apache2/envvars > /etc/apache2/envvars
-sudo sed -e "s/APACHE_RUN_GROUP=.*/APACHE_RUN_GROUP=bitz/g" /etc/apache2/envvars > /etc/apache2/envvars
+sudo sed -e "s/APACHE_RUN_USER=.*/APACHE_RUN_USER=bitz/g" /etc/apache2/envvars > envvars
+sudo sed -e "s/APACHE_RUN_GROUP=.*/APACHE_RUN_GROUP=bitz/g" envvars > envvars
+sudo cp -a envvars /etc/apache2/
 
 mkdir -p /home/bitz/www/repos
 sudo rm /etc/apache2/sites-enabled/*.conf
 sudo cp /home/bitz/code/airbitz-sync-server/staging/apache/git-js.conf /etc/apache2/sites-enabled/
-sudo sed -e "s/ServerName .*/ServerName ${host_name}/g" /etc/apache2/sites-enabled/git-js.conf > /etc/apache2/sites-enabled/git-js.conf
+sudo sed -e "s/ServerName .*/ServerName ${host_name}/g" /etc/apache2/sites-enabled/git-js.conf > git-js.conf
+sudo cp -a git-js.conf /etc/apache2/sites-enabled/
 sudo apachectl -t
 sudo service apache2 restart
 
@@ -83,11 +88,12 @@ cd /home/bitz/code/airbitz-sync-server
 npm i
 cd /home/bitz/code/edge-devops
 npm i
-cd
+cd /home/bitz
 
 ## CouchDB
-sudo sed -e "s@\[ssl\]@\[ssl\]\\ncert_file = /etc/ssl/wildcard/server.crt\\nkey_file = /etc/ssl/wildcard/server.key@g" /etc/couchdb/local.ini > /etc/couchdb/local.ini
-sudo sed -e "s@\[daemons\]@\[daemons\]\\nhttpsd = {couch_httpd, start_link, \[https\]}@g" /etc/couchdb/local.ini > /etc/couchdb/local.ini
+sudo sed -e "s@\[ssl\]@\[ssl\]\\ncert_file = /etc/ssl/wildcard/server.crt\\nkey_file = /etc/ssl/wildcard/server.key@g" /etc/couchdb/local.ini > local.ini
+sudo sed -e "s@\[daemons\]@\[daemons\]\\nhttpsd = {couch_httpd, start_link, \[https\]}@g" local.ini > local.ini
+sudo cp -a local.ini /etc/couchdb/
 echo "Creating db_repos"
 curl -X PUT http://localhost:5984/db_repos
 echo "Creating admin"
