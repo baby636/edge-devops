@@ -49,8 +49,8 @@ ln -s /home/bitz/code/airbitz-sync-server/syncserver /home/bitz/airbitz/ENV/airb
 source /home/bitz/airbitz/ENV/bin/activate
 pip install -r /home/bitz/code/airbitz-sync-server/staging/requirements.txt
 cd /home/bitz/code/airbitz-sync-server/syncserver
-python manage.py migrate auth
-python manage.py migrate
+# python manage.py migrate auth
+# python manage.py migrate
 cd /home/bitz
 
 ## Absync
@@ -78,6 +78,11 @@ sudo sed -e "s/ServerName .*/ServerName ${host_name}/g" /etc/apache2/sites-enabl
 sudo cp -a git-js.conf /etc/apache2/sites-enabled/
 sudo apachectl -t
 sudo service apache2 restart
+
+## Postgres
+# sudo -u postgres psql -c "create role airbitz with login password 'airbitz'";
+# sudo -u postgres createdb -E UTF8 -T template0 syncserver
+# sudo -u postgres psql -d syncserver -c "grant all privileges on database syncserver to airbitz";
 
 ## NodeJS
 sudo apt install curl -y
