@@ -66,8 +66,9 @@ sudo cp /home/bitz/code/airbitz-sync-server/staging/supervisord/* /etc/superviso
 sudo supervisorctl update
 
 ## Apache
-sudo sed -e "s/APACHE_RUN_USER=.*/APACHE_RUN_USER=bitz/g" /etc/apache2/envvars > envvars
-sudo sed -e "s/APACHE_RUN_GROUP=.*/APACHE_RUN_GROUP=bitz/g" envvars > envvars
+sudo sed -e "s/APACHE_RUN_USER=.*/APACHE_RUN_USER=bitz/g" /etc/apache2/envvars > envvars.tmp
+sudo sed -e "s/APACHE_RUN_GROUP=.*/APACHE_RUN_GROUP=bitz/g" envvars.tmp > envvars
+sudo cp -a /etc/apache2/envvars /etc/apache2/envvars.bak
 sudo cp -a envvars /etc/apache2/
 
 mkdir -p /home/bitz/www/repos
@@ -96,8 +97,8 @@ npm i
 cd /home/bitz
 
 ## CouchDB
-sudo sed -e "s@\[ssl\]@\[ssl\]\\ncert_file = /etc/ssl/wildcard/server.crt\\nkey_file = /etc/ssl/wildcard/server.key@g" /etc/couchdb/local.ini > local.ini
-sudo sed -e "s@\[daemons\]@\[daemons\]\\nhttpsd = {couch_httpd, start_link, \[https\]}@g" local.ini > local.ini
+sudo sed -e "s@\[ssl\]@\[ssl\]\\ncert_file = /etc/ssl/wildcard/server.crt\\nkey_file = /etc/ssl/wildcard/server.key@g" /etc/couchdb/local.ini > local.ini.tmp
+sudo sed -e "s@\[daemons\]@\[daemons\]\\nhttpsd = {couch_httpd, start_link, \[https\]}@g" local.ini.tmp > local.ini
 sudo cp -a local.ini /etc/couchdb/
 echo "Creating db_repos"
 curl -X PUT http://localhost:5984/db_repos
