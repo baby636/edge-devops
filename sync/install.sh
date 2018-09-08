@@ -18,11 +18,17 @@ export seed_server=""' > env.sh
   exit 1
 fi
 
+rm -rf /home/bitz/code
 machine_name="$(echo ${host_name} | cut -d'.' -f1)"
 
 source env.sh
-sudo sed -e "s/127.0.0.1 /127.0.0.1 ${machine_name} ${host_name} /g" /etc/hosts > hosts
-sudo cp -a hosts /etc/
+if grep -q "${machine_name} ${host_name}" /etc/hosts
+then
+  sudo sed -i '$ d' /etc/hosts
+fi
+
+sudo echo "127.0.0.1 ${machine_name} ${host_name}" > hosts
+sudo cat hosts >> /etc/hosts
 sudo echo $machine_name > hostname
 sudo cp -a hostname /etc/hostname
 sudo apt-get update -y
@@ -43,6 +49,7 @@ mkdir -p /home/bitz/code
 cd /home/bitz/code
 git clone git@github.com:EdgeApp/airbitz-sync-server.git
 git clone git@github.com:EdgeApp/edge-devops.git
+rm /home/bitz/airbitz/ENV/airbitz
 ln -s /home/bitz/code/airbitz-sync-server/syncserver /home/bitz/airbitz/ENV/airbitz
 
 ## Update virtual ENV
