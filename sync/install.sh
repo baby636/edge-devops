@@ -1,18 +1,18 @@
-echo "Please enter the full DNS name of this machine (ie. git1.edge.app):"
-read host_name
-echo "Please enter an SSH private key with authorization to access github.com"
-read ssh_key
-echo "Please enter a CouchDB admin password"
-read couchdb_admin_password
-echo "Please enter a CouchDB user password"
-read couchdb_user_password
-echo "Please enter a seed server to synchronize with full URL. ie."
-echo "https://username:password@git2.edge.app:6984"
-read seed_server
+if [ ! -f env.sh ]; then
+  echo '# Full DNS name of this machine (ie. git1.edge.app)
+export host_name=""
+# SSH private key with authorization to access github.com
+export ssh_key=""
+# CouchDB admin password
+export couchdb_admin_password=""
+# CouchDB user password
+export couchdb_user_password=""
+# Seed server to synchronize with full URL. ie.
+# https://username:password@git2.edge.app:6984
+export seed_server=""' > env.sh
+  echo 'Please complete the created env.sh file and rerun install script'
+fi
 
-echo "You said: ${host_name}"
-machine_name="$(echo ${host_name} | cut -d'.' -f1)"
-echo $machine_name
 sudo sed -e "s/127.0.0.1 /127.0.0.1 ${machine_name} ${host_name} /g" /etc/hosts > /etc/hosts
 sudo echo $machine_name > /etc/hostname
 sudo apt-get update -y
