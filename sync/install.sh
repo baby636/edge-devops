@@ -81,11 +81,17 @@ cd
 ## CouchDB
 sudo sed -e "s@\[ssl\]@\[ssl\]\\ncert_file = /etc/ssl/wildcard/server.crt\\nkey_file = /etc/ssl/wildcard/server.key@g" /etc/couchdb/local.ini > /etc/couchdb/local.ini
 sudo sed -e "s@\[daemons\]@\[daemons\]\\nhttpsd = {couch_httpd, start_link, \[https\]}@g" /etc/couchdb/local.ini > /etc/couchdb/local.ini
+echo "Creating db_repos"
 curl -X PUT http://localhost:5984/db_repos
-curl -HContent-Type:application/json -vXPUT http://localhost:5984/_users/org.couchdb.user:bitz --data-binary "{\"_id\": \"org.couchdb.user:bitz\",\"name\": \"bitz\",\"roles\": [],\"type\": \"user\",\"password\": \"${couchdb_user_password}\"}"
+echo "Creating admin"
 curl -s -X PUT http://localhost:5984/_config/admins/admin -d "\"${couchdb_admin_password}\""
-curl -X PUT http://localhost:5984/_config/httpd/bind_address -d '"0.0.0.0"'
-curl -X PUT http://localhost:5984/_config/httpd/require_valid_user -d '"true"'
+echo "Adding sync user"
+curl -HContent-Type:application/json -vXPUT http://admin:${couchdb_admin_password}@localhost:5984/_users/org.couchdb.user:bitz --data-binary "{\"_id\": \"org.couchdb.user:bitz\",\"name\": \"bitz\",\"roles\": [],\"type\": \"user\",\"password\": \"${couchdb_user_password}\"}"
+echo "Changing bind address"
+curl -X PUT http://admin:${couchdb_admin_password}@localhost:5984/_config/httpd/bind_address -d '"0.0.0.0"'
+echo "Change require_valid_user => true"
+curl -X PUT http://admin:${couchdb_admin_password}@localhost:5984/_config/httpd/require_valid_user -d '"true"'
+echo "Restarting couchdb"
 sudo systemctl restart couchdb
 echo "Testing CouchDB connection"
 curl localhost:5984
