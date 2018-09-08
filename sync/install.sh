@@ -54,7 +54,7 @@ cd /home/bitz/code/airbitz-sync-server/syncserver
 cd /home/bitz
 
 ## Absync
-sudo mkdir /etc/absync
+sudo mkdir -p /etc/absync
 sudo rsync -avz /home/bitz/code/airbitz-sync-server/staging/hooks /etc/absync/
 sudo cp /home/bitz/code/airbitz-sync-server/staging/libgit2* /usr/lib
 sudo cp /home/bitz/code/airbitz-sync-server/staging/ab-sync /usr/bin/ 
