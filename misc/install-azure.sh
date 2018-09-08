@@ -14,6 +14,10 @@ EOF
 sudo mkfs -t ext4 /dev/sdc1
 sudo mkdir -p /datadrive
 sudo mount /dev/sdc1 /datadrive
+if grep -q "datadrive" /etc/fstab
+then
+  sudo sed -i '$ d' /etc/fstab
+fi
 sudo sh -c blkid | sudo tail -1 | sudo awk -F '"' '{print $2}' | awk '{print "UUID=\""$1"\"   /datadrive   ext4   defaults   1   2"}' > ~/fstab
 sudo sh -c 'cat ~/fstab >> /etc/fstab'
 sudo umount /datadrive

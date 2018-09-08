@@ -12,7 +12,11 @@ export couchdb_user_password=""
 # Seed server to synchronize with full URL. ie.
 # https://username:password@git2.edge.app:6984
 export seed_server=""' > env.sh
-  echo 'Please complete the created env.sh file and rerun install script'
+  echo '
+  
+  *** Please complete the created env.sh file and rerun install script ***
+  
+  '
   exit 1
 fi
 
