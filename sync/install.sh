@@ -47,7 +47,7 @@ ln -s /home/bitz/code/airbitz-sync-server/syncserver /home/bitz/airbitz/ENV/airb
 
 ## Update virtual ENV
 source /home/bitz/airbitz/ENV/bin/activate
-pip install -r home/bitz/code/airbitz-sync-server/staging/requirements.txt
+pip install -r /home/bitz/code/airbitz-sync-server/staging/requirements.txt
 cd /home/bitz/code/airbitz-sync-server/syncserver
 python manage.py migrate auth
 python manage.py migrate
