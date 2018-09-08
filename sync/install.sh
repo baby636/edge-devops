@@ -20,11 +20,13 @@ export seed_server=""' > env.sh
   exit 1
 fi
 
+machine_name="$(echo ${host_name} | cut -d'.' -f1)"
+
 source env.sh
 sudo sed -e "s/127.0.0.1 /127.0.0.1 ${machine_name} ${host_name} /g" /etc/hosts > hosts
 sudo cp -a hosts /etc/
 sudo echo $machine_name > hostname
-sudo cp -a hostname > /etc/hostname
+sudo cp -a hostname /etc/hostname
 sudo apt-get update -y
 sudo apt-get upgrade -y
 sudo apt-get install ufw apache2 supervisor python-pip curl python-dev python-virtualenv libncurses5-dev vim git fail2ban libpq-dev postgresql-9.5 couchdb -y
