@@ -116,6 +116,8 @@ npm i
 cd /home/bitz
 
 ## CouchDB
+sudo systemctl stop couchdb
+
 if [ -f /etc/couchdb/local.ini.bak ]; then
   sudo cp -a /etc/couchdb/local.ini.bak /etc/couchdb/local.ini
 else
@@ -140,6 +142,12 @@ sudo cp -a local.ini /etc/couchdb/
 
 sudo chown -R couchdb:couchdb /var/lib/couchdb
 sudo chown -R couchdb:couchdb /etc/couchdb
+
+echo "Starting couchdb"
+sudo systemctl restart couchdb
+
+echo "Waiting for couchdb to start..."
+sleep 4
 
 echo "Creating admin user"
 curl -s -X PUT http://localhost:5984/_config/admins/admin -d "\"${couchdb_admin_password}\""
