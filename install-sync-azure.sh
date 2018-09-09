@@ -1,5 +1,5 @@
 set -e
-## curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/install-sync-azure.sh | sudo bash
+## curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/install-sync-azure.sh | bash
 
 curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/misc/install-adduser.sh | bash
 curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/misc/install-azure.sh | sudo bash
