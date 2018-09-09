@@ -164,7 +164,7 @@ sleep 4
 
 echo "Moving couch data to /datadrive"
 sudo cp -a /var/lib/couchdb /datadrive/
-sudo chown bitz:bitz /datadrive/couchdb
+sudo chown -R couchdb:couchdb /datadrive/couchdb
 
 echo "Starting couchdb"
 sudo systemctl start couchdb
