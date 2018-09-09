@@ -28,8 +28,9 @@ then
   sudo sed -i '$ d' /etc/hosts
 fi
 
-sudo echo "127.0.0.1 ${machine_name} ${host_name}" > hosts
-sudo cat hosts >> /etc/hosts
+cp /etc/hosts hosts
+echo "127.0.0.1 ${machine_name} ${host_name}" >> hosts
+sudo cp hosts /etc/hosts
 sudo echo ${machine_name} > hostname
 sudo cp -a hostname /etc/hostname
 sudo apt-get update -y
