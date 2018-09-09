@@ -19,6 +19,12 @@ export seed_server=""' > env.sh
   exit 1
 fi
 
+sudo mkdir -p /datadrive/repos
+sudo chown bitz:bitz /datadrive/repos
+sudo rm -rf /home/bitz/www
+sudo -u bitz mkdir -p /home/bitz/www
+sudo -u bitz ln -s /datadrive/repos /home/bitz/www/repos
+
 source env.sh
 
 rm -rf /home/bitz/code
@@ -136,11 +142,6 @@ echo "Cleaning and making /var/run/couchdb"
 sudo rm -rf /var/run/couchdb
 sudo mkdir -p /var/run/couchdb
 sudo chown couchdb:couchdb /var/run/couchdb
-echo "Modifying couchdb ini file"
-sudo sed -e "s@\[ssl\]@\[ssl\]\\ncert_file = /etc/ssl/wildcard/server.crt\\nkey_file = /etc/ssl/wildcard/server.key@g" /etc/couchdb/local.ini > local.ini.tmp
-sudo sed -e "s@\[daemons\]@\[daemons\]\\nhttpsd = {couch_httpd, start_link, \[https\]}@g" local.ini.tmp > local.ini
-sudo cp -a local.ini /etc/couchdb/
-
 sudo chown -R couchdb:couchdb /var/lib/couchdb
 sudo chown -R couchdb:couchdb /etc/couchdb
 
@@ -152,6 +153,27 @@ sleep 4
 
 echo "Creating admin user"
 curl -s -X PUT http://localhost:5984/_config/admins/admin -d "\"${couchdb_admin_password}\""
+
+echo "Changing data dir to /datadrive"
+curl -X PUT http://admin:${couchdb_admin_password}@localhost:5984/_config/couchdb/database_dir -d '"/datadrive/couchdb"'
+curl -X PUT http://admin:${couchdb_admin_password}@localhost:5984/_config/couchdb/view_index_dir -d '"/datadrive/couchdb"'
+
+echo "Stopping CouchDB"
+sudo systemctl stop couchdb
+sleep 4
+
+echo "Moving couch data to /datadrive"
+sudo cp -a /var/lib/couchdb /datadrive/
+sudo chown bitz:bitz /datadrive/couchdb
+
+echo "Starting couchdb"
+sudo systemctl start couchdb
+sleep 4
+
+echo "Enabling SSL"
+curl -X PUT http://admin:${couchdb_admin_password}@localhost:5984/_config/daemons/httpsd -d '"{couch_httpd, start_link, [https]}"'
+curl -X PUT http://admin:${couchdb_admin_password}@localhost:5984/_config/ssl/cert_file -d '"/etc/ssl/wildcard/server.crt"'
+curl -X PUT http://admin:${couchdb_admin_password}@localhost:5984/_config/ssl/key_file -d '"/etc/ssl/wildcard/server.key"'
 
 echo "Creating db_repos"
 curl -X PUT http://admin:${couchdb_admin_password}@localhost:5984/db_repos
