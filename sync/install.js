@@ -12,6 +12,10 @@ fs.writeFileSync('/home/bitz/code/airbitz-sync-server/syncConfig.json', JSON.str
 main()
 
 async function main () {
+    if (!config.couchSeedServer) {
+        console.log('No seed server. Not setting up replication')
+        return
+    }
     const uriObj = parse(config.couchSeedServer, {}, true)
     console.log(uriObj)
     const repHost = 'rep_' + uriObj.hostname.split('.')[0]
