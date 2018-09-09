@@ -11,4 +11,4 @@ alias fg="find . | grep "
 alias docp="docker ps"
 alias docr="docker run"
 alias doc="docker"
-` > ~/.bash_aliases
+' > ~/.bash_aliases
