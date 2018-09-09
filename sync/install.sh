@@ -15,6 +15,7 @@ export seed_server=""' > env.sh
   *** Please complete the created env.sh file and rerun install script ***
   
   '
+  sudo chown bitz:bitz env.sh
   exit 1
 fi
 
