@@ -4,8 +4,8 @@ const parse = require('url-parse')
 let config = require('/home/bitz/code/airbitz-sync-server/syncConfig.sample.json')
 config.couchAdminPassword = process.argv[2]
 config.couchUserPassword = process.argv[3]
-config.couchSeedServer = process.argv[4]
-config.reposUrl = `https://${process.argv[5]}/repos/`
+config.reposUrl = `https://${process.argv[4]}/repos/`
+config.couchSeedServer = process.argv[5]
 
 fs.writeFileSync('/home/bitz/code/airbitz-sync-server/syncConfig.json', JSON.stringify(config))
 
