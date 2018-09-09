@@ -1,12 +1,12 @@
 const fs = require('fs')
 const fetch = require('node-fetch')
 const parse = require('url-parse')
-let config = require('./code/airbitz-sync-server/syncConfig.sample.json')
+let config = require('/home/bitz/code/airbitz-sync-server/syncConfig.sample.json')
 config.couchAdminPassword = process.argv[2]
 config.couchUserPassword = process.argv[3]
 config.couchSeedServer = process.argv[4]
 
-fs.writeFileSync('./code/airbitz-sync-server/syncConfig.json', JSON.stringify(config))
+fs.writeFileSync('/home/bitz/code/airbitz-sync-server/syncConfig.json', JSON.stringify(config))
 
 main()
 
