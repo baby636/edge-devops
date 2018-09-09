@@ -165,9 +165,6 @@ curl -X PUT http://admin:${couchdb_admin_password}@localhost:5984/_config/httpd/
 echo "Change require_valid_user => true"
 curl -X PUT http://admin:${couchdb_admin_password}@localhost:5984/_config/couch_httpd_auth/require_valid_user -d '"true"'
 
-echo "Restarting couchdb"
-sudo systemctl restart couchdb
-
 ## Javascript install script
 node code/edge-devops/sync/install.js ${couchdb_admin_password} ${couchdb_user_password} ${seed_server}
 
