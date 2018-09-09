@@ -80,7 +80,7 @@ sudo cp -a /home/bitz/code/airbitz-sync-server/staging/supervisord/* /etc/superv
 sudo supervisorctl update
 
 ## Apache
-sudo if [ -f /etc/apache2/envvars.bak ]; then
+if [ -f /etc/apache2/envvars.bak ]; then
   sudo cp -a /etc/apache2/envvars.bak /etc/apache2/envvars
 else
   sudo cp -a /etc/apache2/envvars /etc/apache2/envvars.bak
