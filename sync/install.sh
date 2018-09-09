@@ -19,10 +19,11 @@ export seed_server=""' > env.sh
   exit 1
 fi
 
+source env.sh
+
 rm -rf /home/bitz/code
 machine_name="$(echo ${host_name} | cut -d'.' -f1)"
 
-source env.sh
 if grep -q "${machine_name} ${host_name}" /etc/hosts
 then
   sudo sed -i '$ d' /etc/hosts
