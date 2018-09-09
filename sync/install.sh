@@ -163,6 +163,7 @@ sudo systemctl stop couchdb
 sleep 4
 
 echo "Moving couch data to /datadrive"
+sudo mkdir -p /datadrive/couchdb
 sudo cp -a /var/lib/couchdb /datadrive/
 sudo chown -R couchdb:couchdb /datadrive/couchdb
 
