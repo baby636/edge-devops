@@ -5,6 +5,7 @@ let config = require('/home/bitz/code/airbitz-sync-server/syncConfig.sample.json
 config.couchAdminPassword = process.argv[2]
 config.couchUserPassword = process.argv[3]
 config.couchSeedServer = process.argv[4]
+config.reposUrl = `https://${process.argv[5]}/repos/`
 
 fs.writeFileSync('/home/bitz/code/airbitz-sync-server/syncConfig.json', JSON.stringify(config))
 

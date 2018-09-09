@@ -166,13 +166,14 @@ echo "Change require_valid_user => true"
 curl -X PUT http://admin:${couchdb_admin_password}@localhost:5984/_config/couch_httpd_auth/require_valid_user -d '"true"'
 
 ## Javascript install script
-node code/edge-devops/sync/install.js ${couchdb_admin_password} ${couchdb_user_password} ${seed_server}
+node code/edge-devops/sync/install.js ${couchdb_admin_password} ${couchdb_user_password} ${seed_server} ${host_name}
 
 ## Background scripts
 cd /home/bitz/code/airbitz-sync-server/lib
 sudo forever-service install fixStuck -r bitz --script fixStuck.js  --start
 sudo forever-service install gcRepos -r bitz --script gcRepos.js  --start
 sudo forever-service install syncRepos -r bitz --script syncRepos.js  --start
+sudo forever-service install updateServers -r bitz --script updateServers.js  --start
 
 ## Firewall
 sudo ufw default deny incoming
