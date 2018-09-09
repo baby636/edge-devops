@@ -53,7 +53,7 @@ mkdir -p /home/bitz/code
 cd /home/bitz/code
 git clone git@github.com:EdgeApp/airbitz-sync-server.git
 git clone git@github.com:EdgeApp/edge-devops.git
-rm /home/bitz/airbitz/ENV/airbitz
+rm -f /home/bitz/airbitz/ENV/airbitz
 ln -s /home/bitz/code/airbitz-sync-server/syncserver /home/bitz/airbitz/ENV/airbitz
 
 ## Update virtual ENV
