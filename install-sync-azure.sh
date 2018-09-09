@@ -10,3 +10,4 @@ sudo -u bitz mkdir -p /home/bitz/www
 sudo -u bitz ln -s /datadrive/repos /home/bitz/www/repos
 curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/sync/install.sh | bash
 curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/nagios/install.sh | sudo bash
+curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/misc/install-aliases.sh | bash
