@@ -96,8 +96,6 @@ sudo sed -e "s/APACHE_RUN_USER=.*/APACHE_RUN_USER=bitz/g" /etc/apache2/envvars >
 sudo sed -e "s/APACHE_RUN_GROUP=.*/APACHE_RUN_GROUP=bitz/g" envvars.tmp > envvars
 sudo cp -a envvars /etc/apache2/
 
-rm -rf /home/bitz/www/
-mkdir -p /home/bitz/www/repos
 sudo rm -f /etc/apache2/sites-enabled/*.conf
 sudo cp /home/bitz/code/airbitz-sync-server/staging/apache/git-js.conf /etc/apache2/sites-enabled/
 sudo sed -e "s/ServerName .*/ServerName ${host_name}/g" /etc/apache2/sites-enabled/git-js.conf > git-js.conf
