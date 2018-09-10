@@ -156,7 +156,8 @@ echo "Waiting for couchdb to start..."
 sleep 4
 
 echo "Creating admin user"
-curl -s -X PUT http://localhost:5984/_config/admins/admin -d "\"${couchdb_admin_password}\""
+curl -s -X PUT http://localhost:5984/_config/admins/admin -d "\"${couchdb_admin_password}\"" || echo "Failed. But trying to continue anyway"
+sleep 4
 
 echo "Changing data dir to /datadrive"
 curl -X PUT http://admin:${couchdb_admin_password}@localhost:5984/_config/couchdb/database_dir -d '"/datadrive/couchdb"'
