@@ -179,7 +179,7 @@ sleep 4
 echo "Enabling SSL"
 curl -X PUT http://admin:${couchdb_admin_password}@localhost:5984/_config/ssl/cert_file -d '"/etc/ssl/wildcard/server.crt"'
 curl -X PUT http://admin:${couchdb_admin_password}@localhost:5984/_config/ssl/key_file -d '"/etc/ssl/wildcard/server.key"'
-curl -X PUT http://admin:${couchdb_admin_password}@localhost:5984/_config/daemons/httpsd -d '"{couch_httpd, start_link, [https]}"'
+curl -X PUT http://admin:${couchdb_admin_password}@localhost:5984/_config/daemons/httpsd -d '"{couch_httpd, start_link, [https]}"' || echo 'SSL added'
 
 echo "Creating db_repos"
 curl -X PUT http://admin:${couchdb_admin_password}@localhost:5984/db_repos
