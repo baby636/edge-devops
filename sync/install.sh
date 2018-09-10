@@ -145,6 +145,10 @@ sudo chown couchdb:couchdb /var/run/couchdb
 sudo chown -R couchdb:couchdb /var/lib/couchdb
 sudo chown -R couchdb:couchdb /etc/couchdb
 
+sudo mkdir -p /datadrive/couchdb
+sudo cp -a /var/lib/couchdb /datadrive/
+sudo chown -R couchdb:couchdb /datadrive/couchdb
+
 echo "Starting couchdb"
 sudo systemctl restart couchdb
 
