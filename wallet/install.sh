@@ -58,6 +58,14 @@ git clone git@github.com:EdgeApp/edge-devops.git
 rm -f /home/bitz/airbitz/ENV/airbitz
 ln -s /home/bitz/code/airbitz-wallet-server/walletserver /home/bitz/airbitz/ENV/airbitz
 
+## Update sync server addresses
+sudo sed -e "s/SYNC_SERVERS/SYNC_SERVERS=${SYNC_SERVERS}/g" /home/bitz/code/airbitz-wallet-server/staging/etc-profile.d/environment_vars.sh > environment_vars.sh
+sudo sed -e "s/SYNC_SERVERS/SYNC_SERVERS=${SYNC_SERVERS}/g" /home/bitz/code/airbitz-wallet-server/staging/supervisor/celeryd.conf > celeryd.conf
+sudo sed -e "s/SYNC_SERVERS/SYNC_SERVERS=${SYNC_SERVERS}/g" /home/bitz/code/airbitz-wallet-server/staging/supervisor/walletserver.conf > walletserver.conf
+cp -f environment_vars.sh /home/bitz/code/airbitz-wallet-server/staging/etc-profile.d/environment_vars.sh
+cp -f celeryd.conf /home/bitz/code/airbitz-wallet-server/staging/supervisor/celeryd.conf
+cp -f walletserver.conf /home/bitz/code/airbitz-wallet-server/staging/supervisor/walletserver.conf
+
 ## Copy system config files
 sudo cp -f /home/bitz/code/airbitz-wallet-server/staging/etc-profile.d/environment_vars.sh /etc/profile.d/
 
@@ -71,6 +79,8 @@ python manage.py migrate
 python manage.py createsuperuser
 
 sudo cp -a /home/bitz/code/airbitz-wallet-server/staging/supervisord/* /etc/supervisor/conf.d/
+
+## Restart supervisorctl
 sudo supervisorctl update
 
 ## Apache
@@ -97,7 +107,7 @@ npm i
 cd /home/bitz
 
 ## Javascript install script
-node code/edge-devops/sync/install.js ${couchdb_admin_password} ${couchdb_user_password} ${host_name} ${seed_server}
+# node code/edge-devops/sync/install.js ${SYNC_SERVERS}
 
 ## Background scripts
 cd /home/bitz/code/airbitz-wallet-server/lib
