@@ -179,18 +179,23 @@ echo "Enabling SSL"
 curl -X PUT http://admin:${couchdb_admin_password}@localhost:5984/_config/ssl/cert_file -d '"/etc/ssl/wildcard/server.crt"'
 curl -X PUT http://admin:${couchdb_admin_password}@localhost:5984/_config/ssl/key_file -d '"/etc/ssl/wildcard/server.key"'
 curl -X PUT http://admin:${couchdb_admin_password}@localhost:5984/_config/daemons/httpsd -d '"{couch_httpd, start_link, [https]}"' || echo 'SSL added'
+sleep 4
 
 echo "Creating db_repos"
 curl -X PUT http://admin:${couchdb_admin_password}@localhost:5984/db_repos
+sleep 4
 
 echo "Adding sync user"
 curl -HContent-Type:application/json -vXPUT http://admin:${couchdb_admin_password}@localhost:5984/_users/org.couchdb.user:bitz --data-binary "{\"_id\": \"org.couchdb.user:bitz\",\"name\": \"bitz\",\"roles\": [],\"type\": \"user\",\"password\": \"${couchdb_user_password}\"}"
+sleep 4
 
 echo "Changing bind address"
 curl -X PUT http://admin:${couchdb_admin_password}@localhost:5984/_config/httpd/bind_address -d '"0.0.0.0"'
+sleep 4
 
 echo "Change require_valid_user => true"
 curl -X PUT http://admin:${couchdb_admin_password}@localhost:5984/_config/couch_httpd_auth/require_valid_user -d '"true"'
+sleep 4
 
 ## Javascript install script
 node code/edge-devops/sync/install.js ${couchdb_admin_password} ${couchdb_user_password} ${host_name} ${seed_server}
