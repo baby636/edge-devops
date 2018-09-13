@@ -12,6 +12,8 @@ while read line; do
     fi
     fullname=$(echo "${line##* }")
     name=$(echo $fullname | cut -d@ -f1)
+    passwds["$name"]=""
+    id -u $name || continue
     echo "Creating account for" $name
     sudo adduser --disabled-password --gecos "" $name
     sudo echo $line > $name-authorized_keys
