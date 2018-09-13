@@ -1,5 +1,15 @@
 set -e
 
+w=$(whoami)
+
+if [ $w = bitz ]; then
+  echo 'Running as user bitz...'
+else
+  echo "Please run as user bitz"
+  sudo su -l bitz
+  exit 1
+fi
+
 if [ ! -f env.sh ]; then
   echo '# Full DNS name of this machine (ie. git1.edge.app)
 export host_name=""
