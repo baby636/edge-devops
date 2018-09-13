@@ -5,8 +5,8 @@ if [ ! -f env.sh ]; then
 export host_name=""
 
 # Git sync servers comma separated
-# ie. SYNC_SERVERS="https://git2.airbitz.co,https://git3.airbitz.co"
-export SYNC_SERVERS=""
+# ie. SYNC_SERVER_URL="https://git2.airbitz.co,https://git3.airbitz.co"
+export SYNC_SERVER_URL=""
 
 # Admin password for postgres db
 export POSTGRES_ADMIN_PASSWORD=""
@@ -59,9 +59,9 @@ rm -f /home/bitz/airbitz/ENV/airbitz
 ln -s /home/bitz/code/airbitz-wallet-server/walletserver /home/bitz/airbitz/ENV/airbitz
 
 ## Update sync server addresses
-sudo sed -e "s/SYNC_SERVERS/SYNC_SERVERS=${SYNC_SERVERS}/g" /home/bitz/code/airbitz-wallet-server/staging/etc-profile.d/environment_vars.sh > environment_vars.sh
-sudo sed -e "s/SYNC_SERVERS/SYNC_SERVERS=${SYNC_SERVERS}/g" /home/bitz/code/airbitz-wallet-server/staging/supervisor/celeryd.conf > celeryd.conf
-sudo sed -e "s/SYNC_SERVERS/SYNC_SERVERS=${SYNC_SERVERS}/g" /home/bitz/code/airbitz-wallet-server/staging/supervisor/walletserver.conf > walletserver.conf
+sudo sed -e "s/SYNC_SERVERS/SYNC_SERVER_URL=${SYNC_SERVER_URL}/g" /home/bitz/code/airbitz-wallet-server/staging/etc-profile.d/environment_vars.sh > environment_vars.sh
+sudo sed -e "s/SYNC_SERVER_URL/SYNC_SERVER_URL=${SYNC_SERVER_URL}/g" /home/bitz/code/airbitz-wallet-server/staging/supervisor/celeryd.conf > celeryd.conf
+sudo sed -e "s/SYNC_SERVER_URL/SYNC_SERVER_URL=${SYNC_SERVER_URL}/g" /home/bitz/code/airbitz-wallet-server/staging/supervisor/walletserver.conf > walletserver.conf
 cp -f environment_vars.sh /home/bitz/code/airbitz-wallet-server/staging/etc-profile.d/environment_vars.sh
 cp -f celeryd.conf /home/bitz/code/airbitz-wallet-server/staging/supervisor/celeryd.conf
 cp -f walletserver.conf /home/bitz/code/airbitz-wallet-server/staging/supervisor/walletserver.conf
@@ -69,11 +69,22 @@ cp -f walletserver.conf /home/bitz/code/airbitz-wallet-server/staging/supervisor
 ## Copy system config files
 sudo cp -f /home/bitz/code/airbitz-wallet-server/staging/etc-profile.d/environment_vars.sh /etc/profile.d/
 
+## Postgres
+sudo -u postgres psql -c "create role airbitz with login password 'airbitz'";
+sudo -u postgres createdb -E UTF8 wallet
+sudo -u postgres psql -d wallet -c "grant all privileges on database wallet to airbitz";
+
 ## Update virtual ENV
 source /home/bitz/airbitz/ENV/bin/activate
 pip install -r /home/bitz/code/airbitz-wallet-server/staging/requirements.txt
 pip uninstall south
+
 cd /home/bitz/code/airbitz-wallet-server/walletserver
+
+mkdir -p .keys
+keyczart create --location=.keys --purpose=crypt
+keyczart addkey --location=.keys --status=primary --size=256
+
 python manage.py migrate auth
 python manage.py migrate
 python manage.py createsuperuser
@@ -89,11 +100,6 @@ sudo cp -a /home/bitz/code/airbitz-wallet-server/staging/apache/auth-server.conf
 sudo apachectl -t
 sudo service apache2 restart
 
-## Postgres
-sudo -u postgres psql -c "create role airbitz with login password 'airbitz'";
-sudo -u postgres createdb -E UTF8 wallet
-sudo -u postgres psql -d wallet -c "grant all privileges on database wallet to airbitz";
-
 ## NodeJS
 sudo apt install curl -y
 curl -sL https://deb.nodesource.com/setup_10.x | sudo bash -
@@ -107,7 +113,7 @@ npm i
 cd /home/bitz
 
 ## Javascript install script
-# node code/edge-devops/sync/install.js ${SYNC_SERVERS}
+# node code/edge-devops/sync/install.js ${SYNC_SERVER_URL}
 
 ## Background scripts
 cd /home/bitz/code/airbitz-wallet-server/lib
