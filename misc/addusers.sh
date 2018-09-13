@@ -13,8 +13,7 @@ while read line; do
     fullname=$(echo "${line##* }")
     name=$(echo $fullname | cut -d@ -f1)
     passwds["$name"]=""
-    user_notexists=$(id -u $name > /dev/null 2>&1; echo $?)
-    if [ $user_notexists = 1 ]; then
+    if [ -d /home/$name ]; then
         continue
     fi
     echo "Creating account for" $name
