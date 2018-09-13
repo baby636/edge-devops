@@ -13,7 +13,10 @@ while read line; do
     fullname=$(echo "${line##* }")
     name=$(echo $fullname | cut -d@ -f1)
     passwds["$name"]=""
-    id -u $name || continue
+    user_notexists=$(id -u $name > /dev/null 2>&1; echo $?)
+    if [ $user_notexists = 1 ]; then
+        continue
+    fi
     echo "Creating account for" $name
     sudo adduser --disabled-password --gecos "" $name
     sudo echo $line > $name-authorized_keys
