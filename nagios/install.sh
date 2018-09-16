@@ -13,4 +13,13 @@ sudo chown root:root /usr/lib/nagios/plugins/check_disk
 sudo chmod u+s /usr/lib/nagios/plugins/check_disk
 sudo chmod o+x /usr/lib/nagios/plugins/check_disk
 
+# Add status server IP address to allowed IPs
+if [ -f /etc/nagios/nrpe.cfg.bak ]; then
+  sudo cp -a /etc/nagios/nrpe.cfg.bak /etc/nagios/nrpe.cfg
+else
+  sudo cp -a /etc/nagios/nrpe.cfg /etc/nagios/nrpe.cfg.bak
+fi
+sudo sed -e "s/allowed_hosts=.*/allowed_hosts=127.0.0.1,138.197.219.166/g" /etc/nagios/nrpe.cfg > nrpe.cfg
+sudo cp -a nrpe.cfg /etc/nagios/
+
 sudo /etc/init.d/nagios-nrpe-server restart
