@@ -1,3 +1,6 @@
+set -e
+echo $ADMIN_PASSWORD
+
 echo "Please enter the full DNS name of this machine (ie. git1.edge.app):"
 read host_name
 echo "Please enter an SSH private key with authorization to access github.com"
