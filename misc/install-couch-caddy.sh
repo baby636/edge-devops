@@ -1,4 +1,4 @@
-## curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/misc/install-couch-caddy.sh | bash
+## curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/misc/install-couch-caddy.sh > /tmp/install-couch-caddy.sh && bash /tmp/install-couch-caddy.sh
 
 echo 'What is the full DNS name of this machine?'
 read dnsname
