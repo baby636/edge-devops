@@ -1,8 +1,9 @@
-## curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/misc/install-couch-caddy.sh > /tmp/install-couch-caddy.sh && bash /tmp/install-couch-caddy.sh
+## curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/misc/install-couch-caddy.sh | bash
 
-echo 'What is the full DNS name of this machine?'
-read dnsname
-echo hello $dnsname
+h=$(hostname)
+dnsname=${h}."edge.app"
+
+echo Installing as $dnsname
 
 sudo apt-get install -y gnupg ca-certificates
 echo "deb https://apache.bintray.com/couchdb-deb focal main" | sudo tee /etc/apt/sources.list.d/couchdb.list
