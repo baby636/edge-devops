@@ -46,7 +46,7 @@ sudo gpasswd -a $name sudo
 passwd=$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM
 echo "$passwd
 $passwd" | sudo passwd --quiet $name
-echo "Password for $name:" ${passwd]}
+echo "Password for $name:" ${passwd}
 
 while read line; do
     if [[ -z "${line// }" ]]; then
