@@ -46,7 +46,7 @@ if [ ! -d /home/$name ]; then
   sudo gpasswd -a $name sudo
   passwd=$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM
   echo "$passwd
-  $passwd" | sudo passwd --quiet $name
+$passwd" | sudo passwd --quiet $name
   echo "Password for $name:" ${passwd}
 fi
 
