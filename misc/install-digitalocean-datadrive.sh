@@ -12,5 +12,5 @@ else
   echo "Modifying fstab"
   sudo echo "/dev/sda /datadrive ext4 defaults,nofail,discard 0 0" >> /etc/fstab
 fi
-
+sudo mkdir -p /datadrive
 sudo mount /datadrive
