@@ -34,20 +34,20 @@ done < ~/.ssh/authorized_keys
 
 name="edgy"
 if [ ! -d /home/$name ]; then
-  echo "Creating account for" $name
-  sudo adduser --disabled-password --gecos "" $name
-  sudo echo $line > $name-authorized_keys
-  sudo mkdir -p /home/$name/.ssh
-  sudo chmod 754 /home/$name/.ssh
-  sudo cp -f $name-authorized_keys /home/$name/.ssh/authorized_keys
-  sudo chmod 600 /home/$name/.ssh/authorized_keys
-  sudo chown -R $name.$name /home/$name/.ssh
-  sudo gpasswd -a $name ssh
-  sudo gpasswd -a $name sudo
-  passwd=$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM
-  echo "$passwd
+    echo "Creating account for" $name
+    sudo adduser --disabled-password --gecos "" $name
+    sudo echo $line > $name-authorized_keys
+    sudo mkdir -p /home/$name/.ssh
+    sudo chmod 754 /home/$name/.ssh
+    sudo cp -f $name-authorized_keys /home/$name/.ssh/authorized_keys
+    sudo chmod 600 /home/$name/.ssh/authorized_keys
+    sudo chown -R $name.$name /home/$name/.ssh
+    sudo gpasswd -a $name ssh
+    sudo gpasswd -a $name sudo
+    passwd=$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM
+    echo "$passwd
 $passwd" | sudo passwd --quiet $name
-  echo "Password for $name:" ${passwd}
+    echo "Password for $name:" ${passwd}
 fi
 
 while read line; do
