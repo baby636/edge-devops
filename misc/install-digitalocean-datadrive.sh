@@ -14,3 +14,4 @@ else
 fi
 sudo mkdir -p /datadrive
 sudo mount /datadrive
+curl -sSL https://repos.insights.digitalocean.com/install.sh | sudo bash
