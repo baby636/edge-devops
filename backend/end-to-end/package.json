@@ -1,0 +1,17 @@
+{
+  "name": "end-to-end",
+  "version": "1.0.0",
+  "description": "End to end testing for edge servers",
+  "directories": {
+    "tests": "tests"
+  },
+  "scripts": {
+    "start": "newman run collections/** -e environments/** --reporters html,cli,junit  --reporter-junit-export=coverage/newman-report.xml --reporter-html-export=coverage/newman-results.html --insecure"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "newman": "^5.2.2",
+    "newman-reporter-html": "^1.0.5"
+  }
+}
