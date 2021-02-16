@@ -6,6 +6,17 @@ set -e
 ## Gives all created users sudo access and puts their key in the new users ~/.ssh/authorized_keys directory
 
 declare -A passwds
+
+name="edgy"
+if [ ! -d /home/$name ]; then
+    echo "Creating account for" $name
+    sudo adduser --disabled-password --gecos "" $name
+    passwd=$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM
+    echo "$passwd
+$passwd" | sudo passwd --quiet $name
+    echo "Password for $name:" ${passwd}
+fi
+
 while read line; do
     if [[ -z "${line// }" ]]; then
         continue
@@ -31,16 +42,6 @@ while read line; do
 $passwd" | sudo passwd --quiet $name
     passwds["$name"]=$passwd
 done < ~/.ssh/authorized_keys
-
-name="edgy"
-if [ ! -d /home/$name ]; then
-    echo "Creating account for" $name
-    sudo adduser --disabled-password --gecos "" $name
-    passwd=$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM$RANDOM
-    echo "$passwd
-$passwd" | sudo passwd --quiet $name
-    echo "Password for $name:" ${passwd}
-fi
 
 while read line; do
     if [[ -z "${line// }" ]]; then
