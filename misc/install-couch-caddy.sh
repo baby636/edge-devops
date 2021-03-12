@@ -1,7 +1,7 @@
 ## curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/misc/install-couch-caddy.sh | bash
 
 h=$(hostname)
-dnsname=${h}."edge.app"
+dnsname=${h}.${TLD:-"edge.app"}
 
 echo Installing as $dnsname
 
@@ -13,6 +13,13 @@ sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 8756C4F765C9AC3CB6
 echo "deb [trusted=yes] https://apt.fury.io/caddy/ /" | sudo tee -a /etc/apt/sources.list.d/caddy-fury.list
 
 sudo apt update -y
+sudo apt install -y debconf-utils
+echo "couchdb couchdb/adminpass password $COUCH_PASSWORD" | debconf-set-selections
+echo "couchdb couchdb/adminpass_again password $COUCH_PASSWORD" | debconf-set-selections
+echo "couchdb couchdb/nodename string couchdb@$(hostname)-int.edge.app" | debconf-set-selections
+echo "couchdb couchdb/cookie string $COUCH_COOKIE" | debconf-set-selections
+echo "couchdb couchdb/bindaddress string 0.0.0.0" | debconf-set-selections
+echo "couchdb couchdb/mode select $COUCH_MODE" | debconf-set-selections
 sudo apt install -y couchdb
 
 sudo systemctl stop couchdb
