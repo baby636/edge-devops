@@ -1,4 +1,4 @@
-## curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/install-wallet-digitalocean.sh | bash
+## BURL=https://raw.githubusercontent.com/EdgeApp/edge-devops/master; curl -o- $BURL/install-wallet-digitalocean.sh | bash
 
 set -e
 curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/misc/addusers.sh | bash

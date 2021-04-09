@@ -1,4 +1,4 @@
-## curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/misc/install-couch-caddy-1604.sh | bash
+## BURL=https://raw.githubusercontent.com/EdgeApp/edge-devops/master; curl -o- $BURL/misc/install-couch-caddy-1604.sh | bash
 
 h=$(hostname)
 dnsname=${h}."edge.app"
