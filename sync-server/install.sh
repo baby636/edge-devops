@@ -26,7 +26,7 @@ ldconfig
 
 # Install edge-sync-server
 echo "Provisioning sync server as edgy user..."
-sudo -i -u edgy bash -c "export COUCH_PASSWORD=$COUCH_PASSWORD; bash <(curl -o- \"https://raw.githubusercontent.com/EdgeApp/edge-devops/master/sync-server/install-sync-server.sh\")"
+sudo -i -u edgy bash -c "export COUCH_PASSWORD=$COUCH_PASSWORD; bash <(curl -o- \"https://raw.githubusercontent.com/EdgeApp/edge-devops/master/sync-server/project-install.sh\")"
 
 # Setup PM2 to resurrect on startup
 echo "Setting up PM2 startup..."
