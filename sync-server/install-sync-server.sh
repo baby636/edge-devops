@@ -2,16 +2,20 @@
 
 # Recommended to be run as edgy user
 
+# Clone
 echo "Cloning edge-sync-server..."
 mkdir ~/apps
 cd ~/apps
 git clone https://github.com/EdgeApp/edge-sync-server.git
 
+# Install
 echo "Installing edge-sync-server..."
 cd edge-sync-server
 yarn
 
+# Start processes
 echo "Starting edge-sync-server..."
-pm2 start --name=edge-sync-server lib/index.js
-# Save pm2 state for resurrection after reboot
+pm2 start pm2.json
+
+# Save PM2 state for reboot resurrection
 pm2 save
