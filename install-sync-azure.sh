@@ -1,5 +1,7 @@
 ## BURL=https://raw.githubusercontent.com/EdgeApp/edge-devops/master; curl -o- $BURL/install-sync-azure.sh | bash
 
+echo "Running: $BURL/install-sync-azure.sh"
+
 echo "Stopping CouchDB in case it's running"
 sudo systemctl stop couchdb
 sleep 4

@@ -1,5 +1,7 @@
 ## BURL=https://raw.githubusercontent.com/EdgeApp/edge-devops/master; curl -o- $BURL/sync-server/install.sh | bash
 
+echo "Running: $BURL/sync-server/install.sh"
+
 # Install NodeJS/NPM LTS
 echo "Installing NodeJS/NPM..."
 curl -fsSL https://deb.nodesource.com/setup_14.x | bash

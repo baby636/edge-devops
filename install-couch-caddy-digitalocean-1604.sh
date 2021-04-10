@@ -1,5 +1,7 @@
 ## BURL=https://raw.githubusercontent.com/EdgeApp/edge-devops/master; curl -o- $BURL/install-couch-caddy-digitalocean-1604.sh | bash
 
+echo "Running: $BURL/install-couch-caddy-digitalocean-1604.sh"
+
 echo "Stopping CouchDB in case it's running"
 sudo systemctl stop couchdb
 sleep 4

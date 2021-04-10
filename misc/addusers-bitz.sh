@@ -2,6 +2,8 @@ set -e
 
 ## BURL=https://raw.githubusercontent.com/EdgeApp/edge-devops/master; curl -o- $BURL/misc/addusers.sh | bash
 
+echo "Running: $BURL/misc/addusers.sh"
+
 ## Auto create users based on the ~/.ssh/authorized_keys file of the current user.
 ## Gives all created users sudo access and puts their key in the new users ~/.ssh/authorized_keys directory
 

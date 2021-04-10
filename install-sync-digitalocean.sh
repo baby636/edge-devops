@@ -1,5 +1,7 @@
 ## BURL=https://raw.githubusercontent.com/EdgeApp/edge-devops/master; curl -o- $BURL/install-sync-digitalocean.sh | bash
 
+echo "Running: $BURL/install-sync-digitalocean.sh"
+
 # Collect input
 
 if [[ -z $COUCH_MODE ]]; then

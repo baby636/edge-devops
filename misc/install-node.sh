@@ -2,6 +2,8 @@ set -e
 
 ## BURL=https://raw.githubusercontent.com/EdgeApp/edge-devops/master; curl -o- $BURL/misc/install-node.sh | bash
 
+echo "Running: $BURL/misc/install-node.sh"
+
 curl -sL https://deb.nodesource.com/setup_12.x -o nodesource_setup.sh
 sudo bash nodesource_setup.sh
 sudo apt-get install -y nodejs

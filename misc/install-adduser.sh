@@ -2,6 +2,8 @@ set -e
 
 ## BURL=https://raw.githubusercontent.com/EdgeApp/edge-devops/master; curl -o- $BURL/misc/install-adduser.sh | bash
 
+echo "Running: $BURL/misc/install-adduser.sh"
+
 echo '
 sudo adduser $1
 sudo mkdir /home/$1/.ssh

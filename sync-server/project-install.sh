@@ -1,5 +1,7 @@
 ## BURL=https://raw.githubusercontent.com/EdgeApp/edge-devops/master; curl -o- $BURL/sync-server/project-install.sh | bash
 
+echo "Running: $BURL/sync-server/project-install.sh"
+
 # Recommended to be run as edgy user
 
 # Clone
