@@ -24,5 +24,5 @@ echo "Stopping CouchDB in case it's running"
 sudo systemctl stop couchdb
 sleep 4
 set -e
-curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/install-couch-caddy-digitalocean.sh | bash
-curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/sync-server/install.sh | bash
+curl $BURL/install-couch-caddy-digitalocean.sh | bash
+curl $BURL/sync-server/install.sh | bash

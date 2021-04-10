@@ -1,11 +1,13 @@
 /*
+export BURL=https://raw.githubusercontent.com/EdgeApp/edge-devops/master;
 deno run \
   --allow-net \
   --allow-read \
+  --allow-env \
   --unstable \
-  --lock=<(curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/provisions/sync-server-digitalocean/lock.json) \
+  --lock=<(curl -o- "$BURL/provisions/sync-server-digitalocean/lock.json") \
   --cached-only \
-  https://raw.githubusercontent.com/EdgeApp/edge-devops/master/provisions/sync-server-digitalocean/index.ts
+  "$BURL/provisions/sync-server-digitalocean/index.ts"
 */
 
 import { Secret } from "https://deno.land/x/cliffy@v0.17.2/prompt/mod.ts";

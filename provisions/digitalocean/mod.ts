@@ -6,6 +6,9 @@ import {
   Select,
 } from "https://deno.land/x/cliffy@v0.17.2/prompt/mod.ts";
 
+const DEFAULT_BURL =
+  "https://raw.githubusercontent.com/EdgeApp/edge-devops/master";
+
 export interface ProvisionOptions {
   tag?: string;
   token?: string;
@@ -232,7 +235,7 @@ export async function getProvisionSettings(
 
 export async function generateProvisionScript(
   scriptUrl: string,
-  envVars?: Record<string, string>,
+  envVars: Record<string, string> = {},
 ): Promise<string> {
   const scriptContent = await getFile(
     new URL(
@@ -241,14 +244,14 @@ export async function generateProvisionScript(
     ),
   );
 
-  const envScript = envVars
-    ? Object.entries(envVars).reduce(
-      (envScript, [name, value]) => {
-        return envScript + `export ${name}="${value}"\n`;
-      },
-      "",
-    )
-    : "";
+  envVars.BURL = Deno.env.get("BURL") ?? DEFAULT_BURL;
+
+  const envScript = Object.entries(envVars).reduce(
+    (envScript, [name, value]) => {
+      return envScript + `export ${name}="${value}"\n`;
+    },
+    "",
+  );
 
   return `#!/bin/bash\n${envScript}${scriptContent}\n`;
 }
