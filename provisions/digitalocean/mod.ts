@@ -234,15 +234,10 @@ export async function getProvisionSettings(
 }
 
 export async function generateProvisionScript(
-  scriptUrl: string,
+  scriptUrl: URL,
   envVars: Record<string, string> = {},
 ): Promise<string> {
-  const scriptContent = await getFile(
-    new URL(
-      scriptUrl,
-      import.meta.url,
-    ),
-  );
+  const scriptContent = await getFile(scriptUrl);
 
   envVars.BURL = Deno.env.get("BURL") ?? DEFAULT_BURL;
 
