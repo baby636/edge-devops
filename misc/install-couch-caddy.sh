@@ -2,8 +2,9 @@
 
 echo "Running: $BURL/misc/install-couch-caddy.sh"
 
+TLD=${TLD:-"edge.app"}
 h=$(hostname)
-dnsname=${h}.${TLD:-"edge.app"}
+dnsname=${h}.${TLD}
 
 echo Installing as $dnsname
 
@@ -18,7 +19,7 @@ sudo apt update -y
 sudo apt install -y debconf-utils
 echo "couchdb couchdb/adminpass password $COUCH_PASSWORD" | debconf-set-selections
 echo "couchdb couchdb/adminpass_again password $COUCH_PASSWORD" | debconf-set-selections
-echo "couchdb couchdb/nodename string couchdb@$(hostname)-int.edge.app" | debconf-set-selections
+echo "couchdb couchdb/nodename string couchdb@$(hostname)-int.$TLD" | debconf-set-selections
 echo "couchdb couchdb/cookie string $COUCH_COOKIE" | debconf-set-selections
 echo "couchdb couchdb/bindaddress string 0.0.0.0" | debconf-set-selections
 echo "couchdb couchdb/mode select $COUCH_MODE" | debconf-set-selections
