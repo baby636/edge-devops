@@ -27,6 +27,15 @@ sudo apt install -y couchdb
 
 sudo systemctl stop couchdb
 
+# Add seedlist config if present
+if [ -n $COUCH_SEEDLIST ]; then
+  sudo echo "
+[cluster]
+  seedlist = $COUCH_SEEDLIST
+" > /opt/couchdb/etc/local.d/clustering.ini
+fi
+
+# Use datadrive volume for couchdb data
 if [ -d "/datadrive/couchdb" ] 
 then
     echo "Directory /datadrive/couchdb already exists." 

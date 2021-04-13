@@ -19,6 +19,10 @@ if [[ $COUCH_MODE == 'clustered' ]] && [[ -z $COUCH_COOKIE ]]; then
   read -s -p $'Enter CouchDB master cookie: \n\r' COUCH_COOKIE
   export COUCH_COOKIE
 fi
+if [[ $COUCH_MODE == 'clustered' ]] && [[ -z $COUCH_SEEDLIST ]]; then
+  read -s $'Enter CouchDB cluster seedlist: \n\r' COUCH_SEEDLIST
+  export COUCH_SEEDLIST
+fi
 
 echo "Stopping CouchDB in case it's running"
 sudo systemctl stop couchdb

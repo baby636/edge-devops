@@ -12,6 +12,7 @@ deno run \
 
 import {
   Confirm,
+  List,
   Secret,
 } from "https://deno.land/x/cliffy@v0.17.2/prompt/mod.ts";
 import { parseFlags } from "https://deno.land/x/cliffy@v0.17.2/flags/mod.ts";
@@ -62,6 +63,10 @@ const COUCH_COOKIE = config?.couchMasterCookie ?? await Secret.prompt({
   message: "CouchDB master cookie",
   validate: (v) => v.trim() !== "",
 });
+const COUCH_SEEDLIST = config?.couchClusterSeedList ?? await List.prompt({
+  message: "CouchDB cluster seedlist",
+  validate: (v) => v.trim() !== "",
+});
 
 const scriptUrl = new URL(
   "../../install-sync-digitalocean.sh",
@@ -76,6 +81,7 @@ const SCRIPT = await generateProvisionScript(
     COUCH_MODE,
     COUCH_PASSWORD,
     COUCH_COOKIE,
+    COUCH_SEEDLIST: COUCH_SEEDLIST.join(","),
   },
 );
 
