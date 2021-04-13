@@ -15,6 +15,8 @@ sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 8756C4F765C9AC3CB6
 
 echo "deb [trusted=yes] https://apt.fury.io/caddy/ /" | sudo tee -a /etc/apt/sources.list.d/caddy-fury.list
 
+# Couch:
+
 sudo apt update -y
 sudo apt install -y debconf-utils
 echo "couchdb couchdb/adminpass password $COUCH_PASSWORD" | debconf-set-selections
@@ -49,6 +51,25 @@ fi
 # fi
 
 sudo systemctl restart couchdb
+
+# Wait until couch is up
+let tries=0
+while [ $tries -lt 10 ]; do
+  sleep 2
+  curl "http://admin:$COUCH_PASSWORD@localhost:5984/_up"
+  if [ $? = 0 ]; then
+    break
+  fi
+  echo "CouchDB not ready. Retrying."
+  ((++tries))
+done
+
+# Couch setup
+curl -X PUT "http://admin:$COUCH_PASSWORD@localhost:5984/_users"
+curl -X PUT "http://admin:$COUCH_PASSWORD@localhost:5984/_replicator"
+curl -X PUT "http://admin:$COUCH_PASSWORD@localhost:5984/_global_changes"
+
+# Caddy:
 
 sudo apt install -y caddy
 
