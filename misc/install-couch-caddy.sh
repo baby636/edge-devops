@@ -36,17 +36,17 @@ if [ -n $COUCH_SEEDLIST ]; then
 fi
 
 # Use datadrive volume for couchdb data
-if [ -d "/datadrive/couchdb" ] 
-then
-    echo "Directory /datadrive/couchdb already exists." 
-else
-    sudo mkdir -p /datadrive/couchdb
-    sudo chown couchdb:couchdb /datadrive/couchdb
-    sudo cp -a /var/lib/couchdb/* /datadrive/couchdb/
-    sudo rm /opt/couchdb/data
-    sudo ln -s  /datadrive/couchdb /opt/couchdb/data
-    sudo chown couchdb:couchdb /opt/couchdb/data
-fi
+# if [ -d "/datadrive/couchdb" ] 
+# then
+#     echo "Directory /datadrive/couchdb already exists." 
+# else
+#     sudo mkdir -p /datadrive/couchdb
+#     sudo chown couchdb:couchdb /datadrive/couchdb
+#     sudo cp -a /var/lib/couchdb/* /datadrive/couchdb/
+#     sudo rm /opt/couchdb/data
+#     sudo ln -s  /datadrive/couchdb /opt/couchdb/data
+#     sudo chown couchdb:couchdb /opt/couchdb/data
+# fi
 
 sudo systemctl restart couchdb
 
