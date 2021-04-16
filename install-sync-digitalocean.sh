@@ -29,4 +29,4 @@ sudo systemctl stop couchdb
 sleep 4
 set -e
 curl $BURL/install-couch-caddy-digitalocean.sh | bash
-curl $BURL/sync-server/install.sh | bash
+curl $BURL/sync-server/install.ubuntu.sh | bash

@@ -1,6 +1,6 @@
-## BURL=https://raw.githubusercontent.com/EdgeApp/edge-devops/master; curl -o- $BURL/ubuntu-node/install.sh | bash
+## BURL=https://raw.githubusercontent.com/EdgeApp/edge-devops/master; curl -o- $BURL/nodejs/install.ubuntu.sh | bash
 
-echo "Running: $BURL/ubuntu-node/install.sh"
+echo "Running: $BURL/nodejs/install.ubuntu.sh"
 
 # Install NodeJS/NPM LTS
 echo "Installing NodeJS/NPM..."
