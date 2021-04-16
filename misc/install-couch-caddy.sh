@@ -37,16 +37,35 @@ if [ -n $COUCH_SEEDLIST ]; then
 " > /opt/couchdb/etc/local.d/clustering.ini
 fi
 
-# Use datadrive volume for couchdb data
-# if [ -d "/datadrive/couchdb" ] 
+# Use datadrive volume for couchdb logs
+if [ -d "/datadrive/couchdb/log" ] 
+then
+  echo "Directory /datadrive/couchdb/log already exists." 
+else
+  sudo mkdir -p /datadrive/couchdb/log
+  sudo cp -a /var/log/couchdb/* /datadrive/couchdb/log/
+  sudo chown -R couchdb:couchdb /datadrive/couchdb/log/
+  sudo echo "
+[log]
+writer = file
+file = /datadrive/couchdb/log/couchdb.log
+level = info
+" > /opt/couchdb/etc/local.d/logging.ini
+fi
+
+# Change owner for all new couchdb config files
+sudo chown couchdb:couchdb /opt/couchdb/etc/local.d/*
+
+# Use datadrive volume for couchdb data (deprecated)
+# if [ -d "/datadrive/couchdb/data" ] 
 # then
-#     echo "Directory /datadrive/couchdb already exists." 
+#     echo "Directory /datadrive/couchdb/data already exists." 
 # else
-#     sudo mkdir -p /datadrive/couchdb
-#     sudo chown couchdb:couchdb /datadrive/couchdb
-#     sudo cp -a /var/lib/couchdb/* /datadrive/couchdb/
+#     sudo mkdir -p /datadrive/couchdb/data
+#     sudo chown couchdb:couchdb /datadrive/couchdb/data
+#     sudo cp -a /var/lib/couchdb/* /datadrive/couchdb/data/
 #     sudo rm /opt/couchdb/data
-#     sudo ln -s  /datadrive/couchdb /opt/couchdb/data
+#     sudo ln -s  /datadrive/couchdb/data /opt/couchdb/data
 #     sudo chown couchdb:couchdb /opt/couchdb/data
 # fi
 
