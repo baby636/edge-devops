@@ -5,9 +5,9 @@ deno run \
   --allow-read \
   --allow-env \
   --unstable \
-  --lock=<(curl -o- "$BURL/provisions/sync-server-digitalocean/lock.json") \
+  --lock=<(curl -o- "$BURL/provisions/digitalocean/lock.json") \
   --cached-only \
-  "$BURL/provisions/sync-server-digitalocean/index.ts"
+  "$BURL/provisions/digitalocean/index.ts"
 */
 
 import {
@@ -26,7 +26,7 @@ import {
   generateProvisionScript,
   getProvisionSettings,
   provisionServer,
-} from "../digitalocean/mod.ts";
+} from "./util.ts";
 
 // Config:
 let config: Config | undefined;
@@ -42,7 +42,7 @@ if (configFileName != null) {
 
 // Provision Settings;
 const settings = await getProvisionSettings({
-  tag: "sync",
+  tag: config?.dropletTag,
   token: config?.digitalOceanToken,
   tld: config?.topLevelDomain,
   hostname: config?.hostname,
@@ -52,41 +52,49 @@ const settings = await getProvisionSettings({
   sshKeyNames: config?.sshKeyNames,
 });
 
-// Env Var:
-const { TLD } = settings;
-const COUCH_MODE = "clustered";
-const COUCH_PASSWORD = config?.couchPassword ?? await Secret.prompt({
-  message: "CouchDB password",
-  validate: (v) => v.trim() !== "",
-});
-const COUCH_COOKIE = config?.couchMasterCookie ?? await Secret.prompt({
-  message: "CouchDB master cookie",
-  validate: (v) => v.trim() !== "",
-});
-const COUCH_SEEDLIST = config?.couchClusterSeedList ?? await List.prompt({
-  message: "CouchDB cluster seedlist",
-  validate: (v) => v.trim() !== "",
-});
+// Install Script
+let scriptUrl: URL | undefined;
+let SCRIPT: string | undefined;
 
-const scriptUrl = new URL(
-  "../../install-sync-digitalocean.sh",
-  import.meta.url,
-);
+if (config?.installScript != null) {
+  // Env Var:
+  const { TLD } = settings;
+  const COUCH_MODE = "clustered";
+  const COUCH_PASSWORD = config?.couchPassword ?? await Secret.prompt({
+    message: "CouchDB password",
+    validate: (v) => v.trim() !== "",
+  });
+  const COUCH_COOKIE = config?.couchMasterCookie ?? await Secret.prompt({
+    message: "CouchDB master cookie",
+    validate: (v) => v.trim() !== "",
+  });
+  const COUCH_SEEDLIST = config?.couchClusterSeedList ?? await List.prompt({
+    message: "CouchDB cluster seedlist",
+    validate: (v) => v.trim() !== "",
+  });
 
-// User Data Script:
-const SCRIPT = await generateProvisionScript(
-  scriptUrl,
-  {
-    TLD,
-    COUCH_MODE,
-    COUCH_PASSWORD,
-    COUCH_COOKIE,
-    COUCH_SEEDLIST: COUCH_SEEDLIST.join(","),
-  },
-);
+  scriptUrl = new URL(
+    `../../${config?.installScript}`,
+    import.meta.url,
+  );
 
-console.log(`Provision script url: ${scriptUrl}`);
-console.log(`Provision script:\n${SCRIPT.replace(/^(.)/gm, "  $1")}`);
+  // User Data Script:
+  SCRIPT = await generateProvisionScript(
+    scriptUrl,
+    {
+      TLD,
+      COUCH_MODE,
+      COUCH_PASSWORD,
+      COUCH_COOKIE,
+      COUCH_SEEDLIST: COUCH_SEEDLIST.join(","),
+    },
+  );
+
+  console.log(`Install script url: ${scriptUrl}`);
+  console.log(`Install script:\n${SCRIPT.replace(/^(.)/gm, "  $1")}`);
+} else {
+  console.log(`No install script.`);
+}
 
 const confirmation = skipConfirmation ||
   await Confirm.prompt("Continue with provision?");

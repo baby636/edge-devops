@@ -1,5 +1,5 @@
 {
-  "digitalOceanToken": "hex",
+  "digitalOceanToken": "",
   "topLevelDomain": "edge.app",
   "hostname": "my-server",
   "volumeSizeGb": 10,
@@ -11,5 +11,7 @@
     "couchdb@server1.edge.app",
     "couchdb@server2.edge.app"
   ],
-  "sshKeyNames": ["Paul Puey"]
+  "sshKeyNames": ["Paul Puey"],
+  "installScript": "install-sync-digitalocean.sh",
+  "dropletTag": ""
 }

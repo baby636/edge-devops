@@ -9,6 +9,7 @@ import {
 export type Config = ReturnType<typeof asConfg>;
 export const asConfg = asObject({
   digitalOceanToken: asOptional(asString),
+  dropletTag: asOptional(asString),
   topLevelDomain: asOptional(asString),
   hostname: asOptional(asString),
   volumeSizeGb: asOptional(asNumber),
@@ -18,4 +19,5 @@ export const asConfg = asObject({
   couchMasterCookie: asOptional(asString),
   couchClusterSeedList: asArray(asString),
   sshKeyNames: asOptional(asArray(asString)),
+  installScript: asOptional(asString),
 });
