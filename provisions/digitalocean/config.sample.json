@@ -12,6 +12,6 @@
     "couchdb@server2.edge.app"
   ],
   "sshKeyNames": ["Paul Puey"],
-  "installScript": "install-sync-digitalocean.sh",
+  "installScript": "sync-server/install.ubuntu.sh",
   "dropletTag": ""
 }

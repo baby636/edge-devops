@@ -1,6 +1,6 @@
-## BURL=https://raw.githubusercontent.com/EdgeApp/edge-devops/master; curl -o- $BURL/install-sync-digitalocean.sh | bash
+## BURL=https://raw.githubusercontent.com/EdgeApp/edge-devops/master; curl -o- $BURL/couch-caddy/install.ubuntu.sh | bash
 
-echo "Running: $BURL/install-sync-digitalocean.sh"
+echo "Running: $BURL/couch-caddy/install.ubuntu.sh"
 
 # Collect input
 
@@ -29,4 +29,3 @@ sudo systemctl stop couchdb
 sleep 4
 set -e
 curl $BURL/install-couch-caddy-digitalocean.sh | bash
-curl $BURL/sync-server/install.ubuntu.sh | bash

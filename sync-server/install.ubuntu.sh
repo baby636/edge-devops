@@ -2,6 +2,9 @@
 
 echo "Running: $BURL/sync-server/install.ubuntu.sh"
 
+# Install Couch/Caddy
+curl -o- $BURL/couch-caddy/install.ubuntu.sh | bash
+
 # Install NodeJS environment
 curl -o- $BURL/nodejs/install.ubuntu.sh | bash
 
