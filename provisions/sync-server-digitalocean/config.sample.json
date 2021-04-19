@@ -7,5 +7,9 @@
   "dropletSize": "s-1vcpu-1gb",
   "couchPassword": "password123",
   "couchMasterCookie": "monster",
+  "couchClusterSeedList": [
+    "couchdb@server1.edge.app",
+    "couchdb@server2.edge.app"
+  ],
   "sshKeyNames": ["Paul Puey"]
 }

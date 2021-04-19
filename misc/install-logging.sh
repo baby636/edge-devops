@@ -1,4 +1,7 @@
-## curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/misc/install-logging.sh | bash
+## BURL=https://raw.githubusercontent.com/EdgeApp/edge-devops/master; curl -o- $BURL/misc/install-logging.sh | bash
+
+echo "Running: $BURL/misc/install-logging.sh"
+
 set -e
 
 read -s -p $'Enter Papertrail token: \n\r' TOKEN

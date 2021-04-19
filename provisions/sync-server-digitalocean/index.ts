@@ -1,14 +1,20 @@
 /*
+export BURL=https://raw.githubusercontent.com/EdgeApp/edge-devops/master;
 deno run \
   --allow-net \
   --allow-read \
+  --allow-env \
   --unstable \
-  --lock=<(curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/provisions/sync-server-digitalocean/lock.json) \
+  --lock=<(curl -o- "$BURL/provisions/sync-server-digitalocean/lock.json") \
   --cached-only \
-  https://raw.githubusercontent.com/EdgeApp/edge-devops/master/provisions/sync-server-digitalocean/index.ts
+  "$BURL/provisions/sync-server-digitalocean/index.ts"
 */
 
-import { Secret } from "https://deno.land/x/cliffy@v0.17.2/prompt/mod.ts";
+import {
+  Confirm,
+  List,
+  Secret,
+} from "https://deno.land/x/cliffy@v0.17.2/prompt/mod.ts";
 import { parseFlags } from "https://deno.land/x/cliffy@v0.17.2/flags/mod.ts";
 import { asConfg, Config } from "./config.ts";
 import {
@@ -27,6 +33,7 @@ let config: Config | undefined;
 
 const { flags } = parseFlags(Deno.args);
 const configFileName = asEither(asString, asUndefined)(flags.config);
+const skipConfirmation = Boolean(flags.y);
 
 if (configFileName != null) {
   const configFileContent = await Deno.readTextFile(configFileName);
@@ -56,17 +63,35 @@ const COUCH_COOKIE = config?.couchMasterCookie ?? await Secret.prompt({
   message: "CouchDB master cookie",
   validate: (v) => v.trim() !== "",
 });
+const COUCH_SEEDLIST = config?.couchClusterSeedList ?? await List.prompt({
+  message: "CouchDB cluster seedlist",
+  validate: (v) => v.trim() !== "",
+});
+
+const scriptUrl = new URL(
+  "../../install-sync-digitalocean.sh",
+  import.meta.url,
+);
 
 // User Data Script:
 const SCRIPT = await generateProvisionScript(
-  "../../install-sync-digitalocean.sh",
+  scriptUrl,
   {
     TLD,
     COUCH_MODE,
     COUCH_PASSWORD,
     COUCH_COOKIE,
+    COUCH_SEEDLIST: COUCH_SEEDLIST.join(","),
   },
 );
 
+console.log(`Provision script url: ${scriptUrl}`);
+console.log(`Provision script:\n${SCRIPT.replace(/^(.)/gm, "  $1")}`);
+
+const confirmation = skipConfirmation ||
+  await Confirm.prompt("Continue with provision?");
+
 // Provision:
-await provisionServer(settings, SCRIPT);
+if (confirmation) {
+  await provisionServer(settings, SCRIPT);
+}

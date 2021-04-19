@@ -1,4 +1,6 @@
-## curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/misc/install-aliases.sh | bash
+## BURL=https://raw.githubusercontent.com/EdgeApp/edge-devops/master; curl -o- $BURL/misc/install-aliases.sh | bash
+
+echo "Running: $BURL/misc/install-aliases.sh"
 
 echo '
 alias l="ls -al"

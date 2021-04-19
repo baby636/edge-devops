@@ -1,6 +1,8 @@
 set -e
 
-## curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/misc/install-forever.sh | bash
+## BURL=https://raw.githubusercontent.com/EdgeApp/edge-devops/master; curl -o- $BURL/misc/install-forever.sh | bash
+
+echo "Running: $BURL/misc/install-forever.sh"
 
 sudo npm install -g forever
 sudo npm install -g forever-service

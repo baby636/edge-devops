@@ -1,4 +1,6 @@
-## curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/install-sync-digitalocean.sh | bash
+## BURL=https://raw.githubusercontent.com/EdgeApp/edge-devops/master; curl -o- $BURL/install-sync-digitalocean.sh | bash
+
+echo "Running: $BURL/install-sync-digitalocean.sh"
 
 # Collect input
 
@@ -17,10 +19,14 @@ if [[ $COUCH_MODE == 'clustered' ]] && [[ -z $COUCH_COOKIE ]]; then
   read -s -p $'Enter CouchDB master cookie: \n\r' COUCH_COOKIE
   export COUCH_COOKIE
 fi
+if [[ $COUCH_MODE == 'clustered' ]] && [[ -z $COUCH_SEEDLIST ]]; then
+  read -s $'Enter CouchDB cluster seedlist: \n\r' COUCH_SEEDLIST
+  export COUCH_SEEDLIST
+fi
 
 echo "Stopping CouchDB in case it's running"
 sudo systemctl stop couchdb
 sleep 4
 set -e
-curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/install-couch-caddy-digitalocean.sh | bash
-curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/sync-server/install.sh | bash
+curl $BURL/install-couch-caddy-digitalocean.sh | bash
+curl $BURL/sync-server/install.sh | bash

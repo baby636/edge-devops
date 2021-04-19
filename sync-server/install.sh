@@ -1,17 +1,9 @@
-## curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/sync-server/install.sh | bash
+## BURL=https://raw.githubusercontent.com/EdgeApp/edge-devops/master; curl -o- $BURL/sync-server/install.sh | bash
 
-# Install NodeJS/NPM LTS
-echo "Installing NodeJS/NPM..."
-curl -fsSL https://deb.nodesource.com/setup_14.x | bash
-apt-get install -y nodejs
+echo "Running: $BURL/sync-server/install.sh"
 
-# Install yarn
-echo "Installing Yarn..."
-npm i -g yarn
-
-# Install PM2
-echo "Installing PM2..."
-npm i -g pm2
+# Install NodeJS environment
+curl -o- $BURL/ubuntu-node/install.sh | bash
 
 # Install ab-sync util
 echo "Installing ab-sync..."
@@ -26,8 +18,4 @@ ldconfig
 
 # Install edge-sync-server
 echo "Provisioning sync server as edgy user..."
-sudo -i -u edgy bash -c "export COUCH_PASSWORD=$COUCH_PASSWORD; bash <(curl -o- \"https://raw.githubusercontent.com/EdgeApp/edge-devops/master/sync-server/install-sync-server.sh\")"
-
-# Setup PM2 to resurrect on startup
-echo "Setting up PM2 startup..."
-env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u edgy --hp /home/edgy
+sudo -i -u edgy bash -c "export BURL=$BURL; export COUCH_PASSWORD=$COUCH_PASSWORD; bash <(curl -o- \"$BURL/sync-server/project-install.sh\")"

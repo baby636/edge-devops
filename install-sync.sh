@@ -1,4 +1,6 @@
-## curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/install-sync.sh | bash
+## BURL=https://raw.githubusercontent.com/EdgeApp/edge-devops/master; curl -o- $BURL/install-sync.sh | bash
+
+echo "Running: $BURL/install-sync.sh"
 
 echo "Stopping CouchDB in case it's running"
 sudo systemctl stop couchdb

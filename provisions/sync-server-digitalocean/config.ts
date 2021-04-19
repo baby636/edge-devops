@@ -16,5 +16,6 @@ export const asConfg = asObject({
   dropletSize: asOptional(asString),
   couchPassword: asOptional(asString),
   couchMasterCookie: asOptional(asString),
+  couchClusterSeedList: asArray(asString),
   sshKeyNames: asOptional(asArray(asString)),
 });
