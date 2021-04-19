@@ -7,6 +7,11 @@ import {
   asString,
 } from "https://deno.land/x/cleaners@v0.3.6/mod.ts";
 
+export const asInstallScript = asObject({
+  location: asString,
+  env: asOptional(asMap(asString)),
+});
+
 export type Config = ReturnType<typeof asConfg>;
 export const asConfg = asObject({
   digitalOceanToken: asOptional(asString),
@@ -20,6 +25,6 @@ export const asConfg = asObject({
   couchMasterCookie: asOptional(asString),
   couchClusterSeedList: asArray(asString),
   sshKeyNames: asOptional(asArray(asString)),
-  installScript: asOptional(asString),
+  installScripts: asOptional(asArray(asInstallScript)),
   env: asOptional(asMap(asString)),
 });

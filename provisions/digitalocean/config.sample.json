@@ -13,8 +13,19 @@
   ],
   "sshKeyNames": ["Paul Puey"],
   "dropletTag": "",
-  "installScript": "edge-server/install.ubuntu.sh",
-  "env": {
-    "PROJECT": "edge-sync-server"
-  }
+  "installScripts": [
+    {
+      "location": "couch-caddy/install.ubuntu.sh"
+    },
+    {
+      "location": "nodejs/install.ubuntu.sh"
+    },
+    {
+      "location": "edge-server/install.ubuntu.sh",
+      "env": {
+        "PROJECT_URL": "https://github.com/EdgeApp/project-name.git"
+      }
+    }
+  ],
+  "env": {}
 }

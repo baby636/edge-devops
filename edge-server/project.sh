@@ -5,19 +5,18 @@ echo "Running: $BURL/edge-server/project.sh"
 # Recommended to be run as edgy user
 
 # Clone
-gitUrl="https://github.com/EdgeApp/$PROJECT.git"
-echo "Cloning $gitUrl..."
+echo "Cloning $PROJECT_URL..."
 mkdir ~/apps
 cd ~/apps
-git clone $gitUrl
+git clone $PROJECT_URL
 
 # Install
-echo "Installing $PROJECT..."
-cd $PROJECT
+echo "Installing $PROJECT_URL..."
+cd $(basename $PROJECT_URL .git)
 yarn
 
 # Start processes
-echo "Starting $PROJECT..."
+echo "Starting $PROJECT_URL..."
 pm2 start pm2.json
 
 # Save PM2 state for reboot resurrection

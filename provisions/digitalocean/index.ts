@@ -28,6 +28,8 @@ import {
   provisionServer,
 } from "./util.ts";
 
+const MAX_SCRIPT_SIZE = 64 * 1024;
+
 // Config:
 let config: Config | undefined;
 
@@ -53,48 +55,67 @@ const settings = await getProvisionSettings({
 });
 
 // Install Script
-let scriptUrl: URL | undefined;
 let SCRIPT: string | undefined;
 
-if (config?.installScript != null) {
-  // Env Var:
-  const { TLD } = settings;
-  const COUCH_MODE = "clustered";
-  const COUCH_PASSWORD = config?.couchPassword ?? await Secret.prompt({
-    message: "CouchDB password",
-    validate: (v) => v.trim() !== "",
-  });
-  const COUCH_COOKIE = config?.couchMasterCookie ?? await Secret.prompt({
-    message: "CouchDB master cookie",
-    validate: (v) => v.trim() !== "",
-  });
-  const COUCH_SEEDLIST = config?.couchClusterSeedList ?? await List.prompt({
-    message: "CouchDB cluster seedlist",
-    validate: (v) => v.trim() !== "",
-  });
-
+if (config?.installScripts != null) {
   const ENV = config?.env ?? {};
 
-  scriptUrl = new URL(
-    `../../${config?.installScript}`,
-    import.meta.url,
+  const scripts = await Promise.all(
+    config.installScripts.map(async (installScript) => {
+      // Env Var:
+      const { TLD } = settings;
+      const COUCH_MODE = "clustered";
+      const COUCH_PASSWORD = config?.couchPassword ?? await Secret.prompt({
+        message: "CouchDB password",
+        validate: (v) => v.trim() !== "",
+      });
+      const COUCH_COOKIE = config?.couchMasterCookie ?? await Secret.prompt({
+        message: "CouchDB master cookie",
+        validate: (v) => v.trim() !== "",
+      });
+      const COUCH_SEEDLIST = config?.couchClusterSeedList ?? await List.prompt({
+        message: "CouchDB cluster seedlist",
+        validate: (v) => v.trim() !== "",
+      });
+
+      const scriptUrl = new URL(
+        `../../${installScript.location}`,
+        import.meta.url,
+      );
+
+      // User Data Script:
+      const script = await generateProvisionScript(
+        scriptUrl,
+        {
+          ...ENV,
+          ...installScript.env,
+          TLD,
+          COUCH_MODE,
+          COUCH_PASSWORD,
+          COUCH_COOKIE,
+          COUCH_SEEDLIST: COUCH_SEEDLIST.join(","),
+        },
+      );
+
+      return [
+        bashHeader(`Script: ${scriptUrl}`),
+        script,
+      ]
+        .join("\n");
+    }),
   );
 
-  // User Data Script:
-  SCRIPT = await generateProvisionScript(
-    scriptUrl,
-    {
-      ...ENV,
-      TLD,
-      COUCH_MODE,
-      COUCH_PASSWORD,
-      COUCH_COOKIE,
-      COUCH_SEEDLIST: COUCH_SEEDLIST.join(","),
-    },
-  );
+  SCRIPT = ["#!/bin/bash", ...scripts].join("\n");
 
-  console.log(`Install script url: ${scriptUrl}`);
-  console.log(`Install script:\n${SCRIPT.replace(/^(.)/gm, "  $1")}`);
+  const scriptSize = new Blob([SCRIPT]).size;
+
+  if (scriptSize > MAX_SCRIPT_SIZE) {
+    console.error(
+      `Exceeded maximum script size: ${scriptSize} of ${MAX_SCRIPT_SIZE} bytes`,
+    );
+    Deno.exit(1);
+  }
+  console.log(SCRIPT);
 } else {
   console.log(`No install script.`);
 }
@@ -105,4 +126,10 @@ const confirmation = skipConfirmation ||
 // Provision:
 if (confirmation) {
   await provisionServer(settings, SCRIPT);
+}
+
+function bashHeader(title: string): string {
+  const titleLine = `# ${title} #`;
+  const line = Array.from({ length: titleLine.length + 1 }).join("#");
+  return [line, titleLine, line].join("\n");
 }
