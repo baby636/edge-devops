@@ -73,6 +73,8 @@ if (config?.installScript != null) {
     validate: (v) => v.trim() !== "",
   });
 
+  const ENV = config?.env ?? {};
+
   scriptUrl = new URL(
     `../../${config?.installScript}`,
     import.meta.url,
@@ -82,6 +84,7 @@ if (config?.installScript != null) {
   SCRIPT = await generateProvisionScript(
     scriptUrl,
     {
+      ...ENV,
       TLD,
       COUCH_MODE,
       COUCH_PASSWORD,

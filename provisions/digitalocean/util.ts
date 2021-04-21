@@ -241,14 +241,15 @@ export async function generateProvisionScript(
 
   envVars.BURL = Deno.env.get("BURL") ?? DEFAULT_BURL;
 
-  const envScript = Object.entries(envVars).reduce(
-    (envScript, [name, value]) => {
-      return envScript + `export ${name}="${value}"\n`;
+  const envs = Object.entries(envVars).map(
+    ([name, value]) => {
+      return `export ${name}="${value}"`;
     },
-    "",
   );
+  const envScript = envs.join("\n");
+  const envExports = `export ENV_EXPORTS='${envs.join(";")}'`;
 
-  return `#!/bin/bash\n${envScript}${scriptContent}\n`;
+  return [`#!/bin/bash`, envExports, envScript, scriptContent].join("\n");
 }
 
 export async function provisionServer(

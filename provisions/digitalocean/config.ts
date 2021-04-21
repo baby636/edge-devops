@@ -1,5 +1,6 @@
 import {
   asArray,
+  asMap,
   asNumber,
   asObject,
   asOptional,
@@ -20,4 +21,5 @@ export const asConfg = asObject({
   couchClusterSeedList: asArray(asString),
   sshKeyNames: asOptional(asArray(asString)),
   installScript: asOptional(asString),
+  env: asOptional(asMap(asString)),
 });

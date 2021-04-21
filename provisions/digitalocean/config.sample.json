@@ -12,6 +12,9 @@
     "couchdb@server2.edge.app"
   ],
   "sshKeyNames": ["Paul Puey"],
-  "installScript": "sync-server/install.ubuntu.sh",
-  "dropletTag": ""
+  "dropletTag": "",
+  "installScript": "edge-server/install.ubuntu.sh",
+  "env": {
+    "PROJECT": "edge-sync-server"
+  }
 }
