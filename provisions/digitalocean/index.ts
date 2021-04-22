@@ -7,7 +7,7 @@ deno run \
   --unstable \
   --lock=<(curl -o- "$BURL/lock.json") \
   --cached-only \
-  "$BURL/provisions/digitalocean/index.ts"
+  "$BURL/provisions/digitalocean/index.ts" `#--config config.json`
 */
 
 import {
