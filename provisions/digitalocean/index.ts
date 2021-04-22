@@ -5,7 +5,7 @@ deno run \
   --allow-read \
   --allow-env \
   --unstable \
-  --lock=<(curl -o- "$BURL/provisions/digitalocean/lock.json") \
+  --lock=<(curl -o- "$BURL/lock.json") \
   --cached-only \
   "$BURL/provisions/digitalocean/index.ts"
 */
