@@ -157,7 +157,16 @@ export async function getProvisionSettings(
     },
   ).then((res) => res.json());
 
-  type Size = { slug: string; available: boolean };
+  type Size = {
+    slug: string;
+    memory: number;
+    vcpus: number;
+    disk: number;
+    transfer: number;
+    // deno-lint-ignore camelcase
+    price_monthly: number;
+    available: boolean;
+  };
 
   const sizes: Size[] = sizesResBody.sizes.filter((
     size: Size,
@@ -168,7 +177,8 @@ export async function getProvisionSettings(
     options: sizes.map((
       size,
     ) => ({
-      name: size.slug,
+      name:
+        `${size.slug} | $${size.price_monthly}/mo | ${size.memory} MB RAM | ${size.vcpus} vCPUs | ${size.disk} GB Disk | ${size.transfer} TB transfer`,
       value: size.slug,
     })),
   }));
