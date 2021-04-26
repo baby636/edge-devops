@@ -4,7 +4,7 @@ import {
   Number,
   Secret,
   Select,
-} from "https://deno.land/x/cliffy@v0.17.2/prompt/mod.ts";
+} from "https://deno.land/x/cliffy@v0.18.2/prompt/mod.ts";
 
 const DEFAULT_BURL =
   "https://raw.githubusercontent.com/EdgeApp/edge-devops/master";
@@ -358,9 +358,8 @@ export async function provisionServer(
       ipv4 = networks.v4.find((ipObj: IpObj) =>
         ipObj.type === "public"
       ).ip_address;
-      ipv4Private = networks.v4.find((ipObj: IpObj) =>
-        ipObj.type === "private"
-      ).ip_address;
+      ipv4Private =
+        networks.v4.find((ipObj: IpObj) => ipObj.type === "private").ip_address;
     }
 
     if (networks.v6.length) {

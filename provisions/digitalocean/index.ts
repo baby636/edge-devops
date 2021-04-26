@@ -14,8 +14,8 @@ import {
   Confirm,
   List,
   Secret,
-} from "https://deno.land/x/cliffy@v0.17.2/prompt/mod.ts";
-import { parseFlags } from "https://deno.land/x/cliffy@v0.17.2/flags/mod.ts";
+} from "https://deno.land/x/cliffy@v0.18.2/prompt/mod.ts";
+import { parseFlags } from "https://deno.land/x/cliffy@v0.18.2/flags/mod.ts";
 import { asConfg, Config } from "./config.ts";
 import {
   asEither,
