@@ -1,0 +1,31 @@
+{
+  "digitalOceanToken": "",
+  "topLevelDomain": "edge.app",
+  "hostname": "my-server",
+  "volumeSizeGb": 10,
+  "region": "sfo3",
+  "dropletSize": "s-1vcpu-1gb",
+  "couchPassword": "password123",
+  "couchMasterCookie": "monster",
+  "couchClusterSeedList": [
+    "couchdb@server1.edge.app",
+    "couchdb@server2.edge.app"
+  ],
+  "sshKeyNames": ["Paul Puey"],
+  "dropletTag": "",
+  "installScripts": [
+    {
+      "location": "couch-caddy/install.ubuntu.sh"
+    },
+    {
+      "location": "nodejs/install.ubuntu.sh"
+    },
+    {
+      "location": "edge-server/install.ubuntu.sh",
+      "env": {
+        "PROJECT_URL": "https://github.com/EdgeApp/project-name.git"
+      }
+    }
+  ],
+  "env": {}
+}

@@ -1,9 +1,12 @@
-## BURL=https://raw.githubusercontent.com/EdgeApp/edge-devops/master; curl -o- $BURL/sync-server/install.sh | bash
+## BURL=https://raw.githubusercontent.com/EdgeApp/edge-devops/master; curl -o- $BURL/sync-server/install.ubuntu.sh | bash
 
-echo "Running: $BURL/sync-server/install.sh"
+echo "Running: $BURL/sync-server/install.ubuntu.sh"
+
+# Install Couch/Caddy
+curl -o- $BURL/couch-caddy/install.ubuntu.sh | bash
 
 # Install NodeJS environment
-curl -o- $BURL/ubuntu-node/install.sh | bash
+curl -o- $BURL/nodejs/install.ubuntu.sh | bash
 
 # Install ab-sync util
 echo "Installing ab-sync..."
@@ -18,4 +21,4 @@ ldconfig
 
 # Install edge-sync-server
 echo "Provisioning sync server as edgy user..."
-sudo -i -u edgy bash -c "export BURL=$BURL; export COUCH_PASSWORD=$COUCH_PASSWORD; bash <(curl -o- \"$BURL/sync-server/project-install.sh\")"
+sudo -i -u edgy bash -c "export BURL=$BURL; export COUCH_PASSWORD=$COUCH_PASSWORD; bash <(curl -o- \"$BURL/sync-server/project.sh\")"

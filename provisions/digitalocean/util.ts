@@ -4,7 +4,7 @@ import {
   Number,
   Secret,
   Select,
-} from "https://deno.land/x/cliffy@v0.17.2/prompt/mod.ts";
+} from "https://deno.land/x/cliffy@v0.18.2/prompt/mod.ts";
 
 const DEFAULT_BURL =
   "https://raw.githubusercontent.com/EdgeApp/edge-devops/master";
@@ -157,7 +157,16 @@ export async function getProvisionSettings(
     },
   ).then((res) => res.json());
 
-  type Size = { slug: string; available: boolean };
+  type Size = {
+    slug: string;
+    memory: number;
+    vcpus: number;
+    disk: number;
+    transfer: number;
+    // deno-lint-ignore camelcase
+    price_monthly: number;
+    available: boolean;
+  };
 
   const sizes: Size[] = sizesResBody.sizes.filter((
     size: Size,
@@ -168,7 +177,8 @@ export async function getProvisionSettings(
     options: sizes.map((
       size,
     ) => ({
-      name: size.slug,
+      name:
+        `${size.slug} | $${size.price_monthly}/mo | ${size.memory} MB RAM | ${size.vcpus} vCPUs | ${size.disk} GB Disk | ${size.transfer} TB transfer`,
       value: size.slug,
     })),
   }));
@@ -241,14 +251,15 @@ export async function generateProvisionScript(
 
   envVars.BURL = Deno.env.get("BURL") ?? DEFAULT_BURL;
 
-  const envScript = Object.entries(envVars).reduce(
-    (envScript, [name, value]) => {
-      return envScript + `export ${name}="${value}"\n`;
+  const envs = Object.entries(envVars).map(
+    ([name, value]) => {
+      return `export ${name}="${value}"`;
     },
-    "",
   );
+  const envScript = envs.join("\n");
+  const envExports = `export ENV_EXPORTS='${envs.join(";")}'`;
 
-  return `#!/bin/bash\n${envScript}${scriptContent}\n`;
+  return [`#!/bin/bash`, envExports, envScript, scriptContent].join("\n");
 }
 
 export async function provisionServer(
@@ -347,9 +358,8 @@ export async function provisionServer(
       ipv4 = networks.v4.find((ipObj: IpObj) =>
         ipObj.type === "public"
       ).ip_address;
-      ipv4Private = networks.v4.find((ipObj: IpObj) =>
-        ipObj.type === "private"
-      ).ip_address;
+      ipv4Private =
+        networks.v4.find((ipObj: IpObj) => ipObj.type === "private").ip_address;
     }
 
     if (networks.v6.length) {
