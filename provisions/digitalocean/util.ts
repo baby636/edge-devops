@@ -404,6 +404,15 @@ export async function provisionServer(
   console.log("done!");
 
   // SSH into machine
+  console.log(`SSHing into root@${config.DOMAIN}...`)
+  const ssh = Deno.run({
+    cmd: ["ssh", `root@${config.DOMAIN} \"cd /var/log/syslog \"$1\"`]
+  });
+  
+  const { code } = await ssh.status();
+  console.log(code)
+  
+  ssh.close(); // Close cmd
 }
 
 export function getFile(url: URL): Promise<string> {

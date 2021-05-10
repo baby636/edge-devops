@@ -3,6 +3,7 @@ export BURL=https://raw.githubusercontent.com/EdgeApp/edge-devops/master;
 deno run \
   --allow-net \
   --allow-read \
+  --allow-run \
   --allow-env \
   --unstable \
   --lock=<(curl -o- "$BURL/lock.json") \
