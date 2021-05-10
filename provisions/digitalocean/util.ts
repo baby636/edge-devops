@@ -402,6 +402,8 @@ export async function provisionServer(
   }
 
   console.log("done!");
+
+  // SSH into machine
 }
 
 export function getFile(url: URL): Promise<string> {
