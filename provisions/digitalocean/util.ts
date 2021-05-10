@@ -48,11 +48,37 @@ export async function getProvisionSettings(
 
   const headers = getFetchHeaders(TOKEN);
 
-  // Top-level Domain:
-  const TLD = opt?.tld ?? await Input.prompt({
-    message: "Enter top-level domain",
-    default: "edge.app",
-  });
+  // Get Domains:
+  const domainsResBody = await fetch(
+    "https://api.digitalocean.com/v2/domains",
+    {
+      headers,
+    },
+  ).then((res) => res.json());
+
+  const accountDomains: DomainRecord[] = domainsResBody.domains;
+
+  const promptDomainSelection = async (): Promise<string> => {
+    return (await Select.prompt({
+      message: "Select top-level domain",
+      validate: (tld: string) => accountDomains.some(({ name }) => name === tld),
+      options: domainsResBody.domains.map((
+        obj: { name: string; ttl: number },
+      ) => ({
+        name: obj.name,
+        value: obj.name,
+      })),
+    }))
+  };
+
+  // Set top-level Domain:
+  const TLD = opt?.tld ?? await promptDomainSelection()
+
+  // If TLD is invalid, exit with error
+  if (accountDomains.find((domain) => domain.name == TLD) === undefined) {
+    console.error(`Domain name ${TLD} is invalid`)
+    Deno.exit(1);
+  }
 
   // Hostname and Domain Name:
   const HOST = opt?.hostname ?? await Input.prompt({
