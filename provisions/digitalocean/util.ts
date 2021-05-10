@@ -95,7 +95,7 @@ export async function getProvisionSettings(
 
   // Check droplet name:
   if (await isDropletNameUsed(TOKEN, DOMAIN)) {
-    console.error(`Droplet name already used`);
+    console.error(`Droplet name "${DOMAIN}" already used`);
     Deno.exit(1);
   }
 
