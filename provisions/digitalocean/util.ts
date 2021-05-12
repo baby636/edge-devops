@@ -48,11 +48,52 @@ export async function getProvisionSettings(
 
   const headers = getFetchHeaders(TOKEN);
 
-  // Top-level Domain:
-  const TLD = opt?.tld ?? await Input.prompt({
-    message: "Enter top-level domain",
-    default: "edge.app",
-  });
+  // Get Domains:
+  const domainsResBody = await fetch(
+    "https://api.digitalocean.com/v2/domains",
+    {
+      headers,
+    },
+  ).then((res) => res.json());
+
+  const accountDomains: DomainRecord[] = domainsResBody.domains;
+
+  const promptDomainSelection = async (): Promise<string> => {
+    return (await Select.prompt({
+      message: "Select top-level domain",
+      validate: (tld: string) => accountDomains.some(({ name }) => name === tld),
+      options: domainsResBody.domains.map((
+        obj: { name: string; ttl: number },
+      ) => ({
+        name: obj.name,
+        value: obj.name,
+      })),
+    }))
+  };
+
+  // Set top-level Domain:
+  let TLD = opt?.tld ?? await promptDomainSelection()
+
+  // If TLD is invalid, exit with error
+  if (accountDomains.find((domain) => domain.name == TLD) === undefined) {
+    console.error(`Domain name ${TLD} was not found in your account`)
+    const action = await Select.prompt({
+      message: `Do you want to try another domain name or exit and fix config?`,
+      options: [
+        {
+          name: "Exit",
+          value: "exit",
+        },
+        {
+          name: "Choose New Domain",
+          value: "choose",
+        },
+      ],
+    });
+
+    if (action === "exit") Deno.exit(0);
+    if (action === "choose") TLD = await promptDomainSelection()
+  }
 
   // Hostname and Domain Name:
   const HOST = opt?.hostname ?? await Input.prompt({
@@ -69,7 +110,7 @@ export async function getProvisionSettings(
 
   // Check droplet name:
   if (await isDropletNameUsed(TOKEN, DOMAIN)) {
-    console.error(`Droplet name already used`);
+    console.error(`Droplet name "${DOMAIN}" already used`);
     Deno.exit(1);
   }
 
