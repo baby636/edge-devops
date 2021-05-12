@@ -72,12 +72,27 @@ export async function getProvisionSettings(
   };
 
   // Set top-level Domain:
-  const TLD = opt?.tld ?? await promptDomainSelection()
+  let TLD = opt?.tld ?? await promptDomainSelection()
 
   // If TLD is invalid, exit with error
   if (accountDomains.find((domain) => domain.name == TLD) === undefined) {
-    console.error(`Domain name ${TLD} is invalid`)
-    Deno.exit(1);
+    console.error(`Domain name ${TLD} was not found in your account`)
+    const action = await Select.prompt({
+      message: `Do you want to try another domain name or exit and fix config?`,
+      options: [
+        {
+          name: "Exit",
+          value: "exit",
+        },
+        {
+          name: "Choose New Domain",
+          value: "choose",
+        },
+      ],
+    });
+
+    if (action === "exit") Deno.exit(0);
+    if (action === "choose") TLD = await promptDomainSelection()
   }
 
   // Hostname and Domain Name:
