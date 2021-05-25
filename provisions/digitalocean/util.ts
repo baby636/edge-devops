@@ -61,22 +61,23 @@ export async function getProvisionSettings(
   const promptDomainSelection = async (): Promise<string> => {
     return (await Select.prompt({
       message: "Select top-level domain",
-      validate: (tld: string) => accountDomains.some(({ name }) => name === tld),
+      validate: (tld: string) =>
+        accountDomains.some(({ name }) => name === tld),
       options: domainsResBody.domains.map((
         obj: { name: string; ttl: number },
       ) => ({
         name: obj.name,
         value: obj.name,
       })),
-    }))
+    }));
   };
 
   // Set top-level Domain:
-  let TLD = opt?.tld ?? await promptDomainSelection()
+  let TLD = opt?.tld ?? await promptDomainSelection();
 
   // If TLD is invalid, exit with error
   if (accountDomains.find((domain) => domain.name == TLD) === undefined) {
-    console.error(`Domain name ${TLD} was not found in your account`)
+    console.error(`Domain name ${TLD} was not found in your account`);
     const action = await Select.prompt({
       message: `Do you want to try another domain name or exit and fix config?`,
       options: [
@@ -92,7 +93,7 @@ export async function getProvisionSettings(
     });
 
     if (action === "exit") Deno.exit(0);
-    if (action === "choose") TLD = await promptDomainSelection()
+    if (action === "choose") TLD = await promptDomainSelection();
   }
 
   // Hostname and Domain Name:
