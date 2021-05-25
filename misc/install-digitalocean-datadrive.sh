@@ -1,3 +1,4 @@
+# DEPRECATED: use script in recipes/
 ## BURL=https://raw.githubusercontent.com/EdgeApp/edge-devops/master; curl -o- $BURL/misc/install-digitalocean-datadrive.sh | bash
 
 echo "Running: $BURL/misc/install-digitalocean-datadrive.sh"
