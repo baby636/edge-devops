@@ -38,19 +38,20 @@ if [ -n $COUCH_SEEDLIST ]; then
 fi
 
 # Use datadrive volume for couchdb logs
-if [ -d "/datadrive/couchdb/log" ] 
-then
-  echo "Directory /datadrive/couchdb/log already exists." 
-else
-  sudo mkdir -p /datadrive/couchdb/log
-  sudo cp -a /var/log/couchdb/* /datadrive/couchdb/log/
-  sudo chown -R couchdb:couchdb /datadrive/couchdb/log/
-  sudo echo "
-[log]
-writer = file
-file = /datadrive/couchdb/log/couchdb.log
-level = info
-" > /opt/couchdb/etc/local.d/logging.ini
+if [ -d "/datadrive"]; then
+  if [ -d "/datadrive/couchdb/log" ]; then
+    echo "Directory /datadrive/couchdb/log already exists." 
+  else
+    sudo mkdir -p /datadrive/couchdb/log
+    sudo cp -a /var/log/couchdb/* /datadrive/couchdb/log/
+    sudo chown -R couchdb:couchdb /datadrive/couchdb/log/
+    sudo echo "
+  [log]
+  writer = file
+  file = /datadrive/couchdb/log/couchdb.log
+  level = info
+  " > /opt/couchdb/etc/local.d/logging.ini
+  fi
 fi
 
 # Change owner for all new couchdb config files
