@@ -161,9 +161,10 @@ export async function getProvisionSettings(
 
   // Volume Size:
   const VOLUME_SIZE = opt?.volumeSizeGb ?? await Number.prompt({
-    message: "Volume size (GB)",
+    message: "Volume GB size (0 for none)",
     min: 0,
     max: 2000,
+    default: 0,
   });
 
   // Regions:
@@ -312,32 +313,36 @@ export async function provisionServer(
     "Authorization": `Bearer ${config.TOKEN}`,
   };
 
-  // Create Volume:
-  const volumeName = `volume--${config.DOMAIN.replace(/\./g, "-dot-")}`;
+  // Create Volumes:
+  const volumes: string[] = [];
 
-  console.log(`Creating volume '${volumeName}'...`);
+  if (config.VOLUME_SIZE > 0) {
+    const volumeName = `volume--${config.DOMAIN.replace(/\./g, "-dot-")}`;
 
-  const createVolumeRes = await fetch(
-    "https://api.digitalocean.com/v2/volumes",
-    {
-      method: "POST",
-      headers,
-      body: JSON.stringify({
-        size_gigabytes: config.VOLUME_SIZE,
-        name: volumeName,
-        region: config.REGION,
-      }),
-    },
-  );
+    console.log(`Creating volume '${volumeName}'...`);
 
-  if (createVolumeRes.status !== 201) {
-    console.error(await createVolumeRes.text());
-    Deno.exit(1);
+    const createVolumeRes = await fetch(
+      "https://api.digitalocean.com/v2/volumes",
+      {
+        method: "POST",
+        headers,
+        body: JSON.stringify({
+          size_gigabytes: config.VOLUME_SIZE,
+          name: volumeName,
+          region: config.REGION,
+        }),
+      },
+    );
+
+    if (createVolumeRes.status !== 201) {
+      console.error(await createVolumeRes.text());
+      Deno.exit(1);
+    }
+
+    const createVolumeResBody = await createVolumeRes.json();
+    const volumeId = createVolumeResBody.volume.id;
+    volumes.push(volumeId);
   }
-
-  const createVolumeResBody = await createVolumeRes.json();
-
-  const volumeId = createVolumeResBody.volume.id;
 
   // Create Droplet:
   console.log(`Creating droplet '${config.DOMAIN}'....`);
@@ -353,7 +358,7 @@ export async function provisionServer(
         size: config.SIZE,
         ssh_keys: config.SSH_KEY_IDS,
         user_data: script,
-        volumes: [volumeId],
+        volumes,
         image: "ubuntu-20-04-x64",
         ipv6: true,
         monitoring: true,
