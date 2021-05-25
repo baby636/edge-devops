@@ -57,19 +57,6 @@ fi
 # Change owner for all new couchdb config files
 sudo chown couchdb:couchdb /opt/couchdb/etc/local.d/*
 
-# Use datadrive volume for couchdb data (deprecated)
-# if [ -d "/datadrive/couchdb/data" ] 
-# then
-#     echo "Directory /datadrive/couchdb/data already exists." 
-# else
-#     sudo mkdir -p /datadrive/couchdb/data
-#     sudo chown couchdb:couchdb /datadrive/couchdb/data
-#     sudo cp -a /var/lib/couchdb/* /datadrive/couchdb/data/
-#     sudo rm /opt/couchdb/data
-#     sudo ln -s  /datadrive/couchdb/data /opt/couchdb/data
-#     sudo chown couchdb:couchdb /opt/couchdb/data
-# fi
-
 sudo systemctl restart couchdb
 
 # Wait until couch is up
