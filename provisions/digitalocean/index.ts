@@ -62,6 +62,10 @@ if (config?.installScripts != null) {
 
   const scripts = await Promise.all(
     config.installScripts.map(async (installScript) => {
+      const { location, env = undefined } = typeof installScript === "string"
+        ? { location: installScript }
+        : installScript;
+
       // Env Var:
       const { TLD } = settings;
       const COUCH_MODE = "clustered";
@@ -79,7 +83,7 @@ if (config?.installScripts != null) {
       });
 
       const scriptUrl = new URL(
-        `../../${installScript.location}`,
+        `../../${location}`,
         import.meta.url,
       );
 
@@ -88,7 +92,7 @@ if (config?.installScripts != null) {
         scriptUrl,
         {
           ...ENV,
-          ...installScript.env,
+          ...env,
           TLD,
           COUCH_MODE,
           COUCH_PASSWORD,
