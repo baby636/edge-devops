@@ -384,7 +384,7 @@ export async function provisionServer(
   do {
     ++tries;
     console.log("Waiting for droplet creation...");
-    await new Promise((resolve, reject) => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     const getDropletResBody = await fetch(
       `https://api.digitalocean.com/v2/droplets/${dropletId}`,
