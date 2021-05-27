@@ -1,24 +1,20 @@
-# DEPRECATED: use script in recipes/
-## BURL=https://raw.githubusercontent.com/EdgeApp/edge-devops/master; curl -o- $BURL/misc/install-couch-caddy.sh | bash
+## BURL=https://raw.githubusercontent.com/EdgeApp/edge-devops/master; curl -o- $BURL/couch/install.ubuntu.sh | bash
 
-echo "Running: $BURL/misc/install-couch-caddy.sh"
+echo "Running: $BURL/couch/install.ubuntu.sh"
 
 TLD=${TLD:-"edge.app"}
-h=$(hostname)
-dnsname=${h}.${TLD}
+DNSNAME=$(hostname).${TLD}
 
-echo Installing as $dnsname
-
-sudo apt-get install -y gnupg ca-certificates
 echo "deb https://apache.bintray.com/couchdb-deb focal main" | sudo tee /etc/apt/sources.list.d/couchdb.list
-
-sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 8756C4F765C9AC3CB6B85D62379CE192D401AB61
-
-echo "deb [trusted=yes] https://apt.fury.io/caddy/ /" | sudo tee -a /etc/apt/sources.list.d/caddy-fury.list
 
 # Couch:
 
+sudo apt-get install -y gnupg ca-certificates
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 8756C4F765C9AC3CB6B85D62379CE192D401AB61
 sudo apt update -y
+
+echo "Installing CouchDB..."
+
 sudo apt install -y debconf-utils
 echo "couchdb couchdb/adminpass password $COUCH_PASSWORD" | debconf-set-selections
 echo "couchdb couchdb/adminpass_again password $COUCH_PASSWORD" | debconf-set-selections
@@ -77,20 +73,12 @@ curl -X PUT "http://admin:$COUCH_PASSWORD@localhost:5984/_users"
 curl -X PUT "http://admin:$COUCH_PASSWORD@localhost:5984/_replicator"
 curl -X PUT "http://admin:$COUCH_PASSWORD@localhost:5984/_global_changes"
 
-# Caddy:
-
-sudo apt install -y caddy
-
+# Add caddy file
 sudo echo "
 # CouchDB:
-$dnsname:6984 {
+$DNSNAME:6984 {
   reverse_proxy localhost:5984
 }
-
-# Main applications:
-$dnsname {
-  reverse_proxy localhost:8008
-}
-" > /etc/caddy/Caddyfile
+" > /etc/caddy/couch.caddy
 
 sudo systemctl restart caddy

@@ -1,6 +1,6 @@
-## BURL=https://raw.githubusercontent.com/EdgeApp/edge-devops/master; curl -o- $BURL/couch-caddy/install.ubuntu.sh | bash
+## BURL=https://raw.githubusercontent.com/EdgeApp/edge-devops/master; curl -o- $BURL/recipes/couch-caddy.ubuntu.sh | bash
 
-echo "Running: $BURL/couch-caddy/install.ubuntu.sh"
+echo "Running: $BURL/recipes/couch-caddy.ubuntu.sh"
 
 # Collect input
 
@@ -24,8 +24,8 @@ if [[ $COUCH_MODE == 'clustered' ]] && [[ -z $COUCH_SEEDLIST ]]; then
   export COUCH_SEEDLIST
 fi
 
-echo "Stopping CouchDB in case it's running"
-sudo systemctl stop couchdb
-sleep 4
-set -e
-curl $BURL/install-couch-caddy-digitalocean.sh | bash
+curl -o- $BURL/datadrive/install.ubuntu.sh | bash
+curl -o- $BURL/misc/install-aliases.sh | bash
+curl -o- $BURL/caddy/install.ubuntu.sh | bash
+curl -o- $BURL/couch/install.ubuntu.sh | bash
+curl -o- $BURL/misc/addusers.sh | bash

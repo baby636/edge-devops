@@ -1,8 +1,6 @@
-# DEPRECATED: use script in recipes/
-## BURL=https://raw.githubusercontent.com/EdgeApp/edge-devops/master; curl -o- $BURL/misc/install-digitalocean-datadrive.sh | bash
+## BURL=https://raw.githubusercontent.com/EdgeApp/edge-devops/master; curl -o- $BURL/datadrive/install.ubuntu.sh | bash
 
-echo "Running: $BURL/misc/install-digitalocean-datadrive.sh"
-
+echo "Running: $BURL/datadrive/install.ubuntu.sh"
 
 ### Mount Disk
 
