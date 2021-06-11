@@ -448,7 +448,7 @@ export async function provisionServer(
     Deno.exit(1);
   }
 
-  console.log("done!");
+  console.log("Droplet successfully created!");
 }
 
 export function getFile(url: URL): Promise<string> {
