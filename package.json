@@ -18,7 +18,7 @@
   "homepage": "https://github.com/EdgeApp/edge-devops#readme",
   "dependencies": {
     "node-fetch": "^2.2.0",
-    "uri-js": "^4.2.2",
+    "uri-js": "^4.4.1",
     "url-parse": "^1.4.3"
   }
 }
